@@ -8,6 +8,7 @@ def sigmoida(x):
 class NeuronLayer:
     def __init__(self, ileNeuronow, ileWejscnaNeuron):
         self.wagi = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscnaNeuron))) - 1) / 2
+        self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
         self.input = np.asmatrix([])
         self.output = np.asmatrix([])
 
@@ -21,4 +22,4 @@ class NeuralNewtwork:
 
 nl = NeuronLayer(4, 2)
 # sfs
-print(nl.wagi)
+print(nl.bias)

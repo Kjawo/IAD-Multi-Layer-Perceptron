@@ -17,7 +17,13 @@ class NeuralNewtwork:
     def __init__(self, tablicaWarstw):
         self.layers = tablicaWarstw
 
-    # def feed_forward(self, input):
+    def propagate_forward(self, input_matrix):
+        self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias
+        self.layers[0].output = sigmoida(self.layers[0].input)
+        for i in range(1, self.layers.size):
+            self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias
+            self.layers[i].output = sigmoida(self.layers[i].input)
+
 
 
 nl = NeuronLayer(4, 2)

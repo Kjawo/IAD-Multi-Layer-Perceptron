@@ -11,5 +11,5 @@ class NeuronLayer:
 
 
 nl = NeuronLayer(4, 2)
-
+# sfs
 print(nl.wagi)

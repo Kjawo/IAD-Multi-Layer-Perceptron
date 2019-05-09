@@ -1,9 +1,11 @@
 import numpy as np
 
 
-def sigmoida(x):
+def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+def sigmoid_derivative(x):
+    return sigmoid(x) * (1 - sigmoid(x))
 
 class NeuronLayer:
     def __init__(self, ileNeuronow, ileWejscnaNeuron):
@@ -19,10 +21,10 @@ class NeuralNewtwork:
 
     def propagate_forward(self, input_matrix):
         self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias
-        self.layers[0].output = sigmoida(self.layers[0].input)
+        self.layers[0].output = sigmoid(self.layers[0].input)
         for i in range(1, self.layers.size):
             self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias
-            self.layers[i].output = sigmoida(self.layers[i].input)
+            self.layers[i].output = sigmoid(self.layers[i].input)
 
 
 

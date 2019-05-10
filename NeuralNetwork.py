@@ -4,13 +4,15 @@ import numpy as np
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+
 def sigmoid_derivative(x):
     return sigmoid(x) * (1 - sigmoid(x))
 
+
 class NeuronLayer:
-    def __init__(self, ileNeuronow, ileWejscnaNeuron, isBias):
-        self.wagi = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscnaNeuron))) - 1) / 2
-        self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
+    def __init__(self, ileNeuronow, ileWejscNaNeuron, isBias):
+        self.wagi = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscNaNeuron))) - 1) / 2
+        self.bias = np.asmatrix(np.zeros((ileWejscNaNeuron, 1)))
         if isBias:
             for i in range(0, self.bias.size):
                 self.bias[i][0] = 1
@@ -30,7 +32,5 @@ class NeuralNewtwork:
             self.layers[i].output = sigmoid(self.layers[i].input)
 
 
-
-nl = NeuronLayer(4, 2, False)
-# sfs
-print(nl.bias)
+nl = NeuronLayer(2, 3, False)
+print(nl.wagi)

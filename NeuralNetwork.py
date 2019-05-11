@@ -20,7 +20,7 @@ class NeuronLayer:
         # self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
         # if isBias:
         #     for i in range(0, self.bias.size):
-        #         self.bias[i][0] = 1.0
+        #        self.bias[i][0] = 1.0
         self.input = np.asmatrix([])
         self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix([])

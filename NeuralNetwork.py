@@ -17,10 +17,10 @@ def sigmoid_derivative(x):
 class NeuronLayer:
     def __init__(self, ileNeuronow, ileWejscNaNeuron, isBias):
         self.weights = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscNaNeuron))) - 1) / 2
-        # self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
-        # if isBias:
-        #     for i in range(0, self.bias.size):
-        #        self.bias[i][0] = 1.0
+        self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
+        if isBias:
+            for i in range(0, self.bias.size):
+               self.bias[i][0] = 1.0
         self.input = np.asmatrix([])
         self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix([])
@@ -34,10 +34,10 @@ class NeuronLayer:
 
 class NeuralNetwork:
 
-    def __init__(self, topology, bias, input_matrix):
+    def __init__(self, topology, bias, input_size):
         # self.layers = list(range(np.size(input_matrix, 0)))
         self.layers = list([None] * np.size(topology))
-        self.layers[0] = NeuronLayer(topology[0], input_matrix.size, bias)
+        self.layers[0] = NeuronLayer(topology[0], input_size, bias)
         for i in range(1, len(topology)):
             self.layers[i] = NeuronLayer(topology[i], topology[i - 1], bias)
 

@@ -1,51 +1,26 @@
 import numpy as np
 import NeuralNetwork as nn
 
-topology = [2, 4]  # oznacza że sieć ma 3 warstwy kolejno po 3 3 i 1 neuron (nie licząc warstwy wejściowej)
-bias = False
+topology = [2, 4]
+bias = True
 
-# train_data_ex1 = np.array([np.asmatrix([1, 0, 0, 0]).reshape(4, 1),
-#                        np.asmatrix([0, 1, 0, 0]).reshape(4, 1),
-#                        np.asmatrix([0, 0, 1, 0]).reshape(4, 1),
-#                        np.asmatrix([0, 0, 0, 1]).reshape(4, 1)])
-#
-# train_xor = np.array([np.asmatrix([0, 0]).reshape(2, 1),
-#                       np.asmatrix([1, 0]).reshape(2, 1),
-#                       np.asmatrix([0, 1]).reshape(2, 1),
-#                       np.asmatrix([1, 1]).reshape(2, 1)])
-
-# train_data_ex1 = np.array([np.asmatrix([1, 0, 0, 0]).reshape(4, 1),
-#                            np.asmatrix([0, 1, 0, 0]).reshape(4, 1),
-#                            np.asmatrix([0, 0, 1, 0]).reshape(4, 1),
-#                            np.asmatrix([0, 0, 0, 1]).reshape(4, 1)])
-
-# corret_xor = np.vstack(np.array([0, 1, 1, 0]))
-
-train_data_ex1 = np.asmatrix([1, 0, 0, 0])
-
-network = nn.NeuralNetwork(topology, bias, train_data_ex1)
-# target_matrix = []
-
-# network.propagate_forward(input_matrix)
-# network.propagare_back(target_matrix)
-# print(input_matrix)
-# print(network.layers[0].weights)
-
-# print(train_date)
-
+train_data_ex2 = np.asmatrix([0, 1, 0, 0])
+train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
+                             [0, 1, 0, 0],
+                             [0, 0, 1, 0],
+                             [0, 0, 0, 1]])
+df_height, df_width = train_data_ex1.shape
+network = nn.NeuralNetwork(topology, bias, df_height)
 moja_lambda = 0.4
-
-# print(train_xor.shape)
-
 # train
 for i in range(600):  # epoki
-    for x in range(train_data_ex1.shape[0]):
+    for x in range(df_height):
         network.propagate_back(train_data_ex1[x].T, train_data_ex1[x].T, moja_lambda, 0.6)
         moja_lambda *= 0.98
         # print(network.layers[-1].output)
     np.random.shuffle(train_data_ex1)
 
 # test
-network.propagate_forward(train_data_ex1.T)
+network.propagate_forward(train_data_ex2.T)
 
 print(network.layers[-1].output)

@@ -13,18 +13,19 @@ train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
                               [0, 0, 0, 1]])
 df_height, df_width = train_data_ex1.shape
 network = nn.NeuralNetwork(topology, bias, df_height)
-moja_lambda = 0.9
 
+_lambda = 0.9
+_momentum = 0.0
 
 # train
 ox = list()
 oy = list()
 fig = plt.figure()
-for i in range(1000):  # epoki
+for i in range(100000):  # epoki
     cost = 0
 
     for x in range(df_height):
-        network.propagate_back(train_data_ex1[x].T, train_data_ex1[x].T, moja_lambda, 0.0)
+        network.propagate_back(train_data_ex1[x].T, train_data_ex1[x].T, _lambda, _momentum)
         # moja_lambda *= 0.99999
         # print(network.layers[-1].output)
         for q in range(df_height):
@@ -32,18 +33,16 @@ for i in range(1000):  # epoki
     np.random.shuffle(train_data_ex1)
     ox.append(i)
     oy.append(float(cost))
+    print(cost)
+    if cost <= 0.001:
+        print('Osiągnięto zadany błąd\nIteracja: ', i)
+        break
 plt.xlabel('Iteracja')
 plt.ylabel('Błąd')
 plt.plot(ox, oy)
 plt.show()
 
 # pickle.dump(network, open('perceptron', 'wb'))
-
-# test
-# network.propagate_forward(train_data_ex2.T)
-#
-# print(network.layers[-1].output)
-#
 
 train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
                               [0, 1, 0, 0],

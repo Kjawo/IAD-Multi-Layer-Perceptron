@@ -17,7 +17,7 @@ def sigmoid_derivative(x):
 class NeuronLayer:
     def __init__(self, ileNeuronow, ileWejscNaNeuron, isBias):
         self.weights = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscNaNeuron))) - 1) / 2
-        self.bias = np.asmatrix(np.zeros((ileNeuronow, 1)))
+        self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
         if isBias:
             for i in range(0, self.bias.size):
                self.bias[i][0] = 1.0

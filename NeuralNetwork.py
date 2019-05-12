@@ -1,4 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import pickle
+
 
 
 def sigmoid(x):
@@ -80,3 +83,47 @@ class NeuralNetwork:
 
 # nl = NeuronLayer(2, 3, False)
 # print(nl.weights)
+
+
+def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, _sciezka):
+    df_height, df_width = _input_matrix.shape
+
+    network = NeuralNetwork(_topology, _bias, df_height)
+
+    ox = list()
+    oy = list()
+    fig = plt.figure()
+    for i in range(_epoki):  # epoki
+        cost = 0
+
+        for x in range(df_height):
+            network.propagate_back(_input_matrix[x].T, _target_matrix[x].T, _lambda, _momentum)
+            # moja_lambda *= 0.99999
+            # print(network.layers[-1].output)
+            for q in range(df_height):
+                cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
+        np.random.shuffle(_input_matrix)
+        ox.append(i)
+        oy.append(float(cost))
+        print(cost)
+        if cost <= 0.001:
+            print('Osiągnięto zadany błąd\nIteracja: ', i)
+            break
+    title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
+
+
+    plt.title(title)
+    plt.xlabel('Iteracja')
+    plt.ylabel('Błąd')
+
+    plt.plot(ox[0:500], oy[0:500])
+    plt.show()
+
+    plt.title(title)
+    plt.xlabel('Iteracja')
+    plt.ylabel('Błąd')
+
+    plt.plot(ox, oy)
+    plt.show()
+
+    pickle.dump(network, open(_sciezka, 'wb'))

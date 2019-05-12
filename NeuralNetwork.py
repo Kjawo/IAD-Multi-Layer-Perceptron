@@ -88,7 +88,7 @@ class NeuralNetwork:
 def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, _sciezka):
     df_height, df_width = _input_matrix.shape
 
-    network = NeuralNetwork(_topology, _bias, df_height)
+    network = NeuralNetwork(_topology, _bias, df_width)
 
     ox = list()
     oy = list()

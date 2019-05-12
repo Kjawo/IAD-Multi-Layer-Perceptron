@@ -7,23 +7,36 @@ import pandas as pd
 topology = [2, 4]
 bias = True
 
-# input_matrix = np.asmatrix([[1, 0, 0, 0],
-#                             [0, 1, 0, 0],
-#                             [0, 0, 1, 0],
-#                             [0, 0, 0, 1]])
+encoder = np.asmatrix([[1, 0, 0, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 1, 0],
+                            [0, 0, 0, 1]])
 
 file = pd.read_csv('iris.data', header=None)
+
+output = file[4]
+
+
+_target_matrix = np.zeros((file.shape[0], 3))
+
+for row in range(output.size):
+    _target_matrix[row][output[row]] = 1
+
 file = file.drop(columns=[4])
-print(file)
 input_matrix = np.asmatrix(file.as_matrix())
+
+input_matrix = encoder
+_target_matrix = encoder
+
+
 df_height, df_width = input_matrix.shape
-network = nn.NeuralNetwork(topology, bias, df_height)
+# network = nn.NeuralNetwork(topology, bias, df_height)
 
 _lambda = 0.2
 _momentum = 0.9
 sciezka = 'encoder5'
 
-nn.learn(200000, topology, input_matrix, input_matrix, _lambda, _momentum, bias, sciezka)
+nn.learn(100, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
 # train
 # ox = list()
 # oy = list()
@@ -57,6 +70,7 @@ network = pickle.load(open(sciezka, 'rb'))
 #                               [0, 1, 0, 0],
 #                               [0, 0, 1, 0],
 #                               [0, 0, 0, 1]])
+
 
 np.set_printoptions(suppress=True)
 for i in range(df_height):

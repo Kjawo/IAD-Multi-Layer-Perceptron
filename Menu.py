@@ -2,23 +2,28 @@ import numpy as np
 import NeuralNetwork as nn
 import matplotlib.pyplot as plt
 import pickle
+import pandas as pd
 
 topology = [2, 4]
 bias = True
 
-train_data_ex2 = np.asmatrix([0, 1, 0, 0])
-train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
-                              [0, 1, 0, 0],
-                              [0, 0, 1, 0],
-                              [0, 0, 0, 1]])
-df_height, df_width = train_data_ex1.shape
+# input_matrix = np.asmatrix([[1, 0, 0, 0],
+#                             [0, 1, 0, 0],
+#                             [0, 0, 1, 0],
+#                             [0, 0, 0, 1]])
+
+file = pd.read_csv('iris.data', header=None)
+file = file.drop(columns=[4])
+print(file)
+input_matrix = np.asmatrix(file.as_matrix())
+df_height, df_width = input_matrix.shape
 network = nn.NeuralNetwork(topology, bias, df_height)
 
 _lambda = 0.2
 _momentum = 0.9
 sciezka = 'encoder5'
 
-nn.learn(200000, topology, train_data_ex1, train_data_ex1, _lambda, _momentum, bias, sciezka)
+nn.learn(200000, topology, input_matrix, input_matrix, _lambda, _momentum, bias, sciezka)
 # train
 # ox = list()
 # oy = list()
@@ -48,15 +53,15 @@ nn.learn(200000, topology, train_data_ex1, train_data_ex1, _lambda, _momentum, b
 
 
 network = pickle.load(open(sciezka, 'rb'))
-train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
-                              [0, 1, 0, 0],
-                              [0, 0, 1, 0],
-                              [0, 0, 0, 1]])
+# train_data_ex1 = np.asmatrix([[1, 0, 0, 0],
+#                               [0, 1, 0, 0],
+#                               [0, 0, 1, 0],
+#                               [0, 0, 0, 1]])
 
 np.set_printoptions(suppress=True)
 for i in range(df_height):
-    network.propagate_forward(train_data_ex1[i].T)
-    print("\n", train_data_ex1[i], ": ")
+    network.propagate_forward(input_matrix[i].T)
+    print("\n", input_matrix[i], ": ")
     print(network.layers[-1].output)
 
 # network = pickle.load(open('perceptron', 'rb'))

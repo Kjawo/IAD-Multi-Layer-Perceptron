@@ -4,13 +4,24 @@ import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
 
-topology = [2, 4]
+topology = [2, 1]
 bias = True
 
 encoder = np.asmatrix([[1, 0, 0, 0],
                             [0, 1, 0, 0],
                             [0, 0, 1, 0],
                             [0, 0, 0, 1]])
+
+xor = np.asmatrix([[1, 0],
+                   [0, 1],
+                   [0, 0],
+                   [1, 1]])
+
+xor_correct = np.asmatrix([[1],
+                   [1],
+                   [0],
+                   [0]])
+
 
 file = pd.read_csv('iris.data', header=None)
 
@@ -25,18 +36,19 @@ for row in range(output.size):
 file = file.drop(columns=[4])
 input_matrix = np.asmatrix(file.as_matrix())
 
-input_matrix = encoder
-_target_matrix = encoder
+input_matrix = xor
+_target_matrix = xor_correct
+
 
 
 df_height, df_width = input_matrix.shape
 # network = nn.NeuralNetwork(topology, bias, df_height)
 
-_lambda = 0.2
-_momentum = 0.9
+_lambda = 0.6
+_momentum = 0.6
 sciezka = 'encoder5'
 
-nn.learn(100, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
+nn.learn(10000, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
 # train
 # ox = list()
 # oy = list()

@@ -100,9 +100,9 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
             network.propagate_back(_input_matrix[x].T, _target_matrix[x].T, _lambda, _momentum)
             # moja_lambda *= 0.99999
             # print(network.layers[-1].output)
-            for q in range(df_height):
+            for q in range(_target_matrix[0].size):
                 cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
-        np.random.shuffle(_input_matrix)
+        # np.random.shuffle(_input_matrix)
         ox.append(i)
         oy.append(float(cost))
         print(cost)

@@ -130,3 +130,14 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     plt.show()
 
     pickle.dump(network, open(_sciezka, 'wb'))
+
+
+def test(input_matrix, target_matrix, _sciezka):
+    df_height, df_width = input_matrix.shape
+    network = pickle.load(open(_sciezka, 'rb'))
+
+    np.set_printoptions(suppress=True)
+    for i in range(df_height):
+        network.propagate_forward(input_matrix[i].T)
+        print("\n", target_matrix[i], ": ")
+        print(network.layers[-1].output)

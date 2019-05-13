@@ -93,6 +93,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     ox = list()
     oy = list()
     fig = plt.figure()
+
+    iterate_list = list(range(df_height))
     for i in range(_epoki):  # epoki
         cost = 0
 
@@ -103,6 +105,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
             for q in range(_target_matrix[0].size):
                 cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
         # np.random.shuffle(_input_matrix)
+        np.random.shuffle(iterate_list)
         ox.append(i)
         oy.append(float(cost))
         print(cost)

@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
 
-topology = [2, 1]
-bias = True
+topology = [4, 3]
+bias = False
 
 encoder = np.asmatrix([[1, 0, 0, 0],
                             [0, 1, 0, 0],
@@ -28,25 +28,30 @@ file = pd.read_csv('iris.data', header=None)
 output = file[4]
 
 
-_target_matrix = np.zeros((file.shape[0], 3))
+# _target_matrix = np.zeros((file.shape[0], 3))
+#
+# for row in range(output.size):
+#     _target_matrix[row][output[row]] = 1
+
+_target_matrix = np.zeros((file.shape[0], 1))
 
 for row in range(output.size):
-    _target_matrix[row][output[row]] = 1
+    _target_matrix[row] = output[row]
 
 file = file.drop(columns=[4])
 input_matrix = np.asmatrix(file.as_matrix())
 
-input_matrix = xor
-_target_matrix = xor_correct
+# input_matrix = xor
+# _target_matrix = xor_correct
 
 
 
 df_height, df_width = input_matrix.shape
 # network = nn.NeuralNetwork(topology, bias, df_height)
 
-_lambda = 0.6
-_momentum = 0.6
-sciezka = 'encoder5'
+_lambda = 0.1
+_momentum = 0.1
+sciezka = 'irysy2'
 
 nn.learn(10000, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
 # train

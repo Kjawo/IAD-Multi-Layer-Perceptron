@@ -28,32 +28,35 @@ file = pd.read_csv('iris.data', header=None)
 output = file[4]
 
 
-# _target_matrix = np.zeros((file.shape[0], 3))
+# _target_matrix = np.zeros((file.shape[0], 2))
 #
 # for row in range(output.size):
-#     _target_matrix[row][output[row]] = 1
-
-_target_matrix = np.zeros((file.shape[0], 1))
+#     if output[row] == 2:
+#         _target_matrix[row][1] = 1
+#     else:
+#         _target_matrix[row][output[row]] = 1
+# _target_matrix = _target_matrix.astype(np.int)
+_target_matrix = np.zeros((file.shape[0], 3))
 
 for row in range(output.size):
-    _target_matrix[row] = output[row]
+    _target_matrix[row][output[row]] = 1
 
 file = file.drop(columns=[4])
 input_matrix = np.asmatrix(file.as_matrix())
 
-# input_matrix = xor
-# _target_matrix = xor_correct
+# input_matrix = encoder
+# _target_matrix = encoder
 
 
 
 df_height, df_width = input_matrix.shape
 # network = nn.NeuralNetwork(topology, bias, df_height)
 
-_lambda = 0.1
-_momentum = 0.1
+_lambda = 0.6
+_momentum = 0.0
 sciezka = 'irysy2'
 
-nn.learn(10000, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
+nn.learn(100, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
 # train
 # ox = list()
 # oy = list()

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
 
-topology = [4, 3]
+topology = [2, 4]
 bias = False
 
 encoder = np.asmatrix([[1, 0, 0, 0],
@@ -44,8 +44,8 @@ for row in range(output.size):
 file = file.drop(columns=[4])
 input_matrix = np.asmatrix(file.as_matrix())
 
-# input_matrix = encoder
-# _target_matrix = encoder
+input_matrix = encoder
+_target_matrix = encoder
 
 
 
@@ -53,10 +53,10 @@ df_height, df_width = input_matrix.shape
 # network = nn.NeuralNetwork(topology, bias, df_height)
 
 _lambda = 0.6
-_momentum = 0.0
+_momentum = 0.9
 sciezka = 'irysy2'
 
-nn.learn(100, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
+nn.learn(1000, topology, input_matrix, _target_matrix, _lambda, _momentum, bias, sciezka)
 # train
 # ox = list()
 # oy = list()

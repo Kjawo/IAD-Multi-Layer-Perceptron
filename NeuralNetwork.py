@@ -98,8 +98,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     for i in range(_epoki):  # epoki
         cost = 0
 
-        for x in range(df_height):
-            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_target_matrix[x].shape[0], 1), _lambda, _momentum)
+        for x in iterate_list:
+            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), _lambda, _momentum)
             # moja_lambda *= 0.99999
             # print(network.layers[-1].output)
             for q in range(_target_matrix[0].size):

@@ -18,18 +18,19 @@ def sigmoid_derivative(x):
 
 
 class NeuronLayer:
-    def __init__(self, ileNeuronow, ileWejscNaNeuron, isBias):
-        self.weights = (2 * np.asmatrix(np.random.random((ileNeuronow, ileWejscNaNeuron))) - 1) / 2
-        self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
+    def __init__(self, ile_neuronow, ile_wejsc_na_neuron, isBias):
+        self.weights = (2 * np.asmatrix(np.random.random((ile_neuronow, ile_wejsc_na_neuron))) - 1) / 2
+        # self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
+        self.bias = np.asmatrix(np.zeros((ile_neuronow, 1)))
         if isBias:
             for i in range(0, self.bias.size):
-               self.bias[i][0] = 1.0
+                self.bias[i][0] = 1.0
         self.input = np.asmatrix([])
-        self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))).astype(np.float32) - 1) / 2
+        # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix([])
         self.error = np.matrix([])
-        self.v = np.asmatrix(np.zeros((ileNeuronow, ileWejscNaNeuron)))
-        self.vb = np.asmatrix(np.zeros((ileNeuronow, 1)))
+        self.v = np.asmatrix(np.zeros((ile_neuronow, ile_wejsc_na_neuron)))
+        self.vb = np.asmatrix(np.zeros((ile_neuronow, 1)))
 
 # obj.T -> transponowanie macierzy
 # diagflat(array) tworzy macierz diagonalną z wyrazami z array na przekątnej
@@ -85,7 +86,7 @@ class NeuralNetwork:
 # print(nl.weights)
 
 
-def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, _sciezka):
+def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, _desired_cost, _sciezka):
     df_height, df_width = _input_matrix.shape
 
     network = NeuralNetwork(_topology, _bias, df_width)
@@ -93,6 +94,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     ox = list()
     oy = list()
     fig = plt.figure()
+
+    costs = list()
 
     iterate_list = list(range(df_height))
     for i in range(_epoki):  # epoki
@@ -109,7 +112,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
         ox.append(i)
         oy.append(float(cost))
         print(cost)
-        if cost <= 0.001:
+        costs.append(cost)
+        if cost <= _desired_cost:
             print('Osiągnięto zadany błąd\nIteracja: ', i)
             break
     title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
@@ -130,14 +134,42 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     plt.show()
 
     pickle.dump(network, open(_sciezka, 'wb'))
+    pickle.dump(costs, open(_sciezka + "-costs", 'wb'))
 
 
-def test(input_matrix, target_matrix, _sciezka):
+def test(input_matrix, target_matrix, _topology, _sciezka):
     df_height, df_width = input_matrix.shape
     network = pickle.load(open(_sciezka, 'rb'))
 
+
+    costs = list()
+    layers = list()
+
+    avg_cost = 0
+
     np.set_printoptions(suppress=True)
     for i in range(df_height):
-        network.propagate_forward(input_matrix[i].T)
+        cost = 0
+        network.errors(input_matrix[i].T, target_matrix[i].reshape(_topology[-1], 1))
         print("\n", target_matrix[i], ": ")
         print(network.layers[-1].output)
+        for q in range(target_matrix[0].size):
+            cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
+        avg_cost += cost
+        costs.append(cost)
+    avg_cost /= df_height
+    print('\nAverage cost: ' + str(cost))
+
+    weights = list()
+    for i in reversed(range(len(_topology))):
+        weights.append(network.layers[i].weights)
+
+    # Data = {'Input matrix': input_matrix,
+    #         'Weights': weights,
+    #         'Target matrix': target_matrix,
+    #         'Cost on every': costs,
+    #         'Avg cost': avg_cost,
+    #         'Network:': network
+    #         }
+    #
+    # print(Data)

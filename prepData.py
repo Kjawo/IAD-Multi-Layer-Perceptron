@@ -8,7 +8,7 @@ def encoder():
                            [0, 1, 0, 0],
                            [0, 0, 1, 0],
                            [0, 0, 0, 1]])
-    return encoder, encoder, encoder, encoder
+    return encoder, np.asarray(encoder), encoder, np.asarray(encoder)
 
 
 def xor():

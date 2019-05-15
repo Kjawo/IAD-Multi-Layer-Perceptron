@@ -159,7 +159,7 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         avg_cost += cost
         costs.append(cost)
     avg_cost /= df_height
-    print('\nAverage cost: ' + str(cost))
+    print('\nAverage cost: ' + str(avg_cost))
     print('Mistakes count: ' + str(mistake_count))
     print('Sample count: ' + str(df_height))
     print('Correctly guessed: ' + str((df_height - mistake_count) / df_height * 100) + "%")

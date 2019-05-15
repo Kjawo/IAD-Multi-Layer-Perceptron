@@ -87,10 +87,13 @@ class NeuralNetwork:
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, plot_step, _desired_cost,
-          _sciezka):
+          _sciezka, continue_learing):
     df_height, df_width = _input_matrix.shape
 
-    network = NeuralNetwork(_topology, _bias, df_width)
+    if continue_learing:
+        network = pickle.load(open(_sciezka, 'rb'))
+    else:
+        network = NeuralNetwork(_topology, _bias, df_width)
 
     ax = list()
     ay = list()
@@ -163,10 +166,10 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         avg_cost += cost
         costs.append(cost)
     avg_cost /= df_height
-    print('\nAverage cost: ' + str(avg_cost))
+    print('\nAverage cost: ' + "%0.4f" % avg_cost)
     print('Mistakes count: ' + str(mistake_count))
     print('Sample count: ' + str(df_height))
-    print('Correctly guessed: ' + str((df_height - mistake_count) / df_height * 100) + "%")
+    print('Correctly guessed: ' + "%0.2f" % ((df_height - mistake_count) / df_height * 100) + "%")
 
     weights = list()
     for i in reversed(range(len(_topology))):

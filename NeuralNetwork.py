@@ -147,6 +147,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
 
     avg_cost = 0
 
+    mistake_count = 0
+
     np.set_printoptions(suppress=True)
     for i in range(df_height):
         cost = 0
@@ -155,10 +157,15 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         print(network.layers[-1].output)
         for q in range(target_matrix[0].size):
             cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
+        if (np.where(target_matrix[i] == np.amax(target_matrix[i]))[0]) != \
+                (np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]):
+            mistake_count += 1
         avg_cost += cost
         costs.append(cost)
     avg_cost /= df_height
     print('\nAverage cost: ' + str(cost))
+    print('Mistakes count: ' + str(mistake_count))
+    print('Correctly guessed: ' + str( (df_height-mistake_count)/df_height ))
 
     weights = list()
     for i in reversed(range(len(_topology))):

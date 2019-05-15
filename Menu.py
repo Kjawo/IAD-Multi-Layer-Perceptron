@@ -12,14 +12,14 @@ import pandas as pd
 # TODO: User interface
 
 
-topology = [2, 4]
+topology = [6, 3]
 bias = True
 _lambda = 0.6
 _momentum = 0.0
 sciezka = 'encoder'
 
-input_matrix, target_matrix = prepData.encoder()
+train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix = prepData.iris()
 
-nn.learn(500, topology, input_matrix, target_matrix, _lambda, _momentum, bias, 0.001, sciezka)
+nn.learn(1000, topology, train_input_matrix, train_target_matrix, _lambda, _momentum, bias, 0.001, sciezka)
 
-nn.test(input_matrix, target_matrix, topology, sciezka)
+nn.test(test_input_matrix, test_target_matrix, topology, sciezka)

@@ -141,12 +141,11 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     df_height, df_width = input_matrix.shape
     network = pickle.load(open(_sciezka, 'rb'))
 
-
     costs = list()
     layers = list()
 
     avg_cost = 0
-
+    cost = 0
     mistake_count = 0
 
     np.set_printoptions(suppress=True)
@@ -165,7 +164,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     avg_cost /= df_height
     print('\nAverage cost: ' + str(cost))
     print('Mistakes count: ' + str(mistake_count))
-    print('Correctly guessed: ' + str( (df_height-mistake_count)/df_height ))
+    print('Sample count: ' + str(df_height))
+    print('Correctly guessed: ' + str((df_height-mistake_count)/df_height*100) + "%")
 
     weights = list()
     for i in reversed(range(len(_topology))):

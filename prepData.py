@@ -58,7 +58,6 @@ def iris():
     train_input_matrix = np.asmatrix(train_data.as_matrix())
     test_input_matrix = np.asmatrix(test_data.as_matrix())
 
-
     return train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix
 
 
@@ -79,10 +78,10 @@ def seeds():
     test_output = test_data[7]
 
     for row in range(train_output.size):
-        train_target_matrix[row][train_output[row]-1] = 1
+        train_target_matrix[row][train_output[row] - 1] = 1
 
     for row in range(test_output.size):
-        test_target_matrix[row][test_output[row]-1] = 1
+        test_target_matrix[row][test_output[row] - 1] = 1
 
     train_data = train_data.drop(columns=[7])
     test_data = test_data.drop(columns=[7])

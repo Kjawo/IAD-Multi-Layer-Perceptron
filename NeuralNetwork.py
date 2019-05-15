@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import pickle
 
 
-
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -31,6 +30,7 @@ class NeuronLayer:
         self.error = np.matrix([])
         self.v = np.asmatrix(np.zeros((ile_neuronow, ile_wejsc_na_neuron)))
         self.vb = np.asmatrix(np.zeros((ile_neuronow, 1)))
+
 
 # obj.T -> transponowanie macierzy
 # diagflat(array) tworzy macierz diagonalną z wyrazami z array na przekątnej
@@ -103,8 +103,6 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
 
         for x in iterate_list:
             network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), _lambda, _momentum)
-            # moja_lambda *= 0.99999
-            # print(network.layers[-1].output)
             for q in range(_target_matrix[0].size):
                 cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
         # np.random.shuffle(_input_matrix)
@@ -117,7 +115,6 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
             print('Osiągnięto zadany błąd\nIteracja: ', i)
             break
     title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
-
 
     plt.title(title)
     plt.xlabel('Iteracja')
@@ -165,18 +162,18 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     print('\nAverage cost: ' + str(cost))
     print('Mistakes count: ' + str(mistake_count))
     print('Sample count: ' + str(df_height))
-    print('Correctly guessed: ' + str((df_height-mistake_count)/df_height*100) + "%")
+    print('Correctly guessed: ' + str((df_height - mistake_count) / df_height * 100) + "%")
 
     weights = list()
     for i in reversed(range(len(_topology))):
         weights.append(network.layers[i].weights)
 
-    # Data = {'Input matrix': input_matrix,
-    #         'Weights': weights,
-    #         'Target matrix': target_matrix,
-    #         'Cost on every': costs,
-    #         'Avg cost': avg_cost,
-    #         'Network:': network
-    #         }
-    #
-    # print(Data)
+    test_data = {'Input matrix': input_matrix,
+                 'Weights': weights,
+                 'Target matrix': target_matrix,
+                 'Cost on every': costs,
+                 'Avg cost': avg_cost,
+                 'Network:': network
+                 }
+
+    pickle.dump(costs, open(_sciezka + "-test-data", 'wb'))

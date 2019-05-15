@@ -27,7 +27,10 @@ def xor():
 
 def iris():
     file = pd.read_csv('iris.data', header=None)
-    output = file[4]
+
+    file.loc[file[4] == 'Iris-setosa'] = 0
+    file.loc[file[4] == 'Iris-versicolor'] = 1
+    file.loc[file[4] == 'Iris-virginica'] = 2
 
     train_data = file[file.index % 3 != 0]
     test_data = file[file.index % 3 == 0]

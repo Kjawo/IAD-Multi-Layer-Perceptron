@@ -86,13 +86,14 @@ class NeuralNetwork:
 # print(nl.weights)
 
 
-def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, _desired_cost, _sciezka):
+def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, plot_step, _desired_cost,
+          _sciezka):
     df_height, df_width = _input_matrix.shape
 
     network = NeuralNetwork(_topology, _bias, df_width)
 
-    ox = list()
-    oy = list()
+    ax = list()
+    ay = list()
     fig = plt.figure()
 
     costs = list()
@@ -103,31 +104,34 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
 
         for x in iterate_list:
             network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), _lambda, _momentum)
-            for q in range(_target_matrix[0].size):
-                cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
-        # np.random.shuffle(_input_matrix)
+            if (i % plot_step) == 0:
+                for q in range(_target_matrix[0].size):
+                    cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
+
         np.random.shuffle(iterate_list)
-        ox.append(i)
-        oy.append(float(cost))
-        print(cost)
-        costs.append(cost)
-        if cost <= _desired_cost:
-            print('Osiągnięto zadany błąd\nIteracja: ', i)
-            break
+        if (i % plot_step) == 0:
+            ax.append(i)
+            ay.append(float(cost))
+            print(cost)
+            costs.append(cost)
+            if cost <= _desired_cost:
+                print('Osiągnięto zadany błąd\nIteracja: ', i)
+                break
+
     title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
 
     plt.title(title)
     plt.xlabel('Iteracja')
     plt.ylabel('Błąd')
 
-    plt.plot(ox[0:500], oy[0:500])
+    plt.plot(ax[0:500], ay[0:500])
     plt.show()
 
     plt.title(title)
     plt.xlabel('Iteracja')
     plt.ylabel('Błąd')
 
-    plt.plot(ox, oy)
+    plt.plot(ax, ay)
     plt.show()
 
     pickle.dump(network, open(_sciezka, 'wb'))

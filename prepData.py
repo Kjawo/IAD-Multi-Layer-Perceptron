@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
 
 
 def encoder():
@@ -98,3 +99,24 @@ def seeds():
     test_input_matrix = np.asmatrix(test_data.as_matrix())
 
     return train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix
+
+
+def knn_iris():
+    df = pd.read_csv('iris.data',
+                     names=['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm', 'Species'])
+    X_train, X_test, Y_train, Y_test = train_test_split(df[['SepalLengthCm', 'SepalWidthCm',
+                                                            'PetalLengthCm', 'PetalWidthCm']],
+                                                        df['Species'], random_state=0)
+    return X_train, X_test, Y_train, Y_test
+
+
+def knn_seeds():
+    df = pd.read_csv('seeds_dataset.csv',
+                     names=['area', 'perimeter', 'compactness', 'length of kernel', 'width of kernel',
+                            'asymmetry coefficient', 'length of kernel groove', 'type'])
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        df[['area', 'perimeter', 'compactness', 'length of kernel', 'width of kernel',
+            'asymmetry coefficient', 'length of kernel groove']],
+        df['type'], random_state=0)
+
+    return X_train, X_test, Y_train, Y_test

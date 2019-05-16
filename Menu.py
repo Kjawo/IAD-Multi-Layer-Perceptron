@@ -11,7 +11,6 @@ start = time.time()
 # TODO: Klasyfikator!
 # TODO: Refactor propagate_back
 # TODO: Rename
-# TODO: User interface
 
 
 topology = [6, 3]

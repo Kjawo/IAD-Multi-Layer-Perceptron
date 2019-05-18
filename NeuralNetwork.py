@@ -12,7 +12,7 @@ def sigmoid_derivative(x):
     d = np.asmatrix(np.zeros((z, y)))
     for i in range(z):
         for j in range(y):
-            d[i, j] = x[i, j] * (1.0 - x[i, j])
+            d[i, j] = sigmoid(x[i, j]) * (1.0 - sigmoid(x[i, j]))
     return d
 
 
@@ -131,14 +131,14 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
 
     plt.title(title)
     plt.xlabel('Iteracja')
-    plt.ylabel('Błąd')
+    plt.ylabel('Koszt')
 
     plt.plot(ax[0:500], ay[0:500])
     plt.show()
 
     plt.title(title)
     plt.xlabel('Iteracja')
-    plt.ylabel('Błąd')
+    plt.ylabel('Koszt')
 
     plt.plot(ax, ay)
     plt.show()

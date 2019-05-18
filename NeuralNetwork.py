@@ -12,7 +12,7 @@ def sigmoid_derivative(x):
     d = np.asmatrix(np.zeros((z, y)))
     for i in range(z):
         for j in range(y):
-            d[i, j] = sigmoid(x[i, j]) * (1.0 - sigmoid(x[i, j]))
+            d[i, j] = x[i, j] * (1.0 - x[i, j])
     return d
 
 

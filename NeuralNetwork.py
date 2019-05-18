@@ -17,19 +17,24 @@ def sigmoid_derivative(x):
 
 
 class NeuronLayer:
-    def __init__(self, ile_neuronow, ile_wejsc_na_neuron, isBias):
-        self.weights = (2 * np.asmatrix(np.random.random((ile_neuronow, ile_wejsc_na_neuron))) - 1) / 2
+    def __init__(self, neurons_count, inputs_per_neuron, is_Bias):
+        self.weights = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron))) - 1) / 2
         # self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
-        self.bias = np.asmatrix(np.zeros((ile_neuronow, 1)))
-        if isBias:
-            for i in range(0, self.bias.size):
-                self.bias[i][0] = 1.0
+        self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
+        # if is_Bias:
+        #     for i in range(0, self.bias.size):
+        #         self.bias[i][0] = 1.0
+        if is_Bias:
+            self.bias_value = 1
+        else:
+            self.bias_value = 0
+
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix([])
         self.error = np.matrix([])
-        self.v = np.asmatrix(np.zeros((ile_neuronow, ile_wejsc_na_neuron)))
-        self.vb = np.asmatrix(np.zeros((ile_neuronow, 1)))
+        self.v = np.asmatrix(np.zeros((neurons_count, inputs_per_neuron)))
+        self.vb = np.asmatrix(np.zeros((neurons_count, 1)))
 
 
 # obj.T -> transponowanie macierzy
@@ -46,10 +51,11 @@ class NeuralNetwork:
             self.layers[i] = NeuronLayer(topology[i], topology[i - 1], bias)
 
     def propagate_forward(self, input_matrix):
-        self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias
+        self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias * self.layers[0].bias_value
         self.layers[0].output = sigmoid(self.layers[0].input)
         for i in range(1, len(self.layers)):
-            self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias
+            self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias * \
+                                   self.layers[i].bias_value
             self.layers[i].output = sigmoid(self.layers[i].input)
 
     def errors(self, input_matrix, target_matrix):
@@ -174,6 +180,21 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     weights = list()
     for i in reversed(range(len(_topology))):
         weights.append(network.layers[i].weights)
+
+    print('wagi')
+    print(network.layers[0].weights)
+    print('bias')
+    print(network.layers[0].bias)
+    print('in')
+    print(network.layers[0].input)
+    print('out')
+    print(network.layers[0].output)
+    print('err')
+    print(network.layers[0].error)
+    print('vb')
+    print(network.layers[0].vb)
+    print('v')
+    print(network.layers[0].v)
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

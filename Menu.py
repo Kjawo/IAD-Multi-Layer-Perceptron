@@ -8,13 +8,12 @@ import time
 
 start = time.time()
 
-# TODO: Klasyfikator!
 # TODO: Refactor propagate_back
 # TODO: Rename
 
 
 topology = [6, 3]
-bias = True
+bias = False
 _lambda = 0.6
 _momentum = 0.1
 sciezka = 'encoder'

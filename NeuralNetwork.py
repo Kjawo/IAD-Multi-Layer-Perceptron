@@ -64,7 +64,7 @@ class NeuralNetwork:
 
     def propagate_back(self, input_matrix, target_matrix, _lambda, _momentum):
         self.errors(input_matrix, target_matrix)
-        self.layers[0].v = _lambda * np.multiply(
+        self.layers[0].weight_change = _lambda * np.multiply(
             sigmoid_derivative(self.layers[0].output),
             self.layers[0].error) * input_matrix.T + _momentum * self.layers[0].weight_change
         self.layers[0].weight_change_bias = _lambda * np.multiply(

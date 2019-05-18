@@ -175,8 +175,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
 
         if guessed_class != correct_class:
             mistake_count += 1
-            bledy_i_rodzaju[guessed_class[0]] += 1
-            bledy_ii_rodzaju[correct_class[0]] += 1
+            bledy_i_rodzaju[correct_class[0]] += 1
+            bledy_ii_rodzaju[guessed_class[0]] += 1
         avg_cost += cost
         costs.append(cost)
     avg_cost /= df_height

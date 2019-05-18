@@ -12,7 +12,7 @@ X_train, X_test, Y_train, Y_test = prepData.knn_seeds()
 
 # print("X_train shape: {}\ny_train shape: {}".format(X_train.shape, Y_train.shape))
 # print("X_test shape: {}\ny_test shape: {}".format(X_test.shape, Y_test.shape))
-knn = KNeighborsClassifier(n_neighbors=1)
+knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(X_train, Y_train)
 Y_prediction = knn.predict(X_test)
 output = pd.concat([X_test, Y_test, pd.Series(Y_prediction, name='Predicted', index=X_test.index)],

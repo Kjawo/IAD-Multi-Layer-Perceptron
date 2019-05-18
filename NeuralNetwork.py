@@ -205,4 +205,4 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
                  'Avg cost': avg_cost,
                  'Network:': network
                  }
-    pickle.dump(costs, open(_sciezka + "-test-data", 'wb'))
+    pickle.dump(test_data, open(_sciezka + "-test-data", 'wb'))

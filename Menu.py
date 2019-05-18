@@ -17,7 +17,7 @@ start = time.time()
 
 topology = [6, 3]
 bias = True
-_lambda = 0.2
+_lambda = 0.1
 _momentum = 0.6
 sciezka = 'encoder'
 
@@ -25,7 +25,7 @@ sciezka = 'encoder'
 
 train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix = prepData.iris()
 
-nn.learn(1, topology, train_input_matrix, train_target_matrix, _lambda, _momentum, bias, 1, 0.001, sciezka, False)
+nn.learn(1000, topology, train_input_matrix, train_target_matrix, _lambda, _momentum, bias, 1, 0.001, sciezka, False)
 nn.test(test_input_matrix, test_target_matrix, topology, sciezka)
 
 end = time.time()

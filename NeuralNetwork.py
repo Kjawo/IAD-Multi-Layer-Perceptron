@@ -112,7 +112,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
         cost = 0
 
         for x in iterate_list:
-            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), _lambda, _momentum)
+            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), 2 * _lambda, _momentum)
             if (i % plot_step) == 0:
                 for q in range(_target_matrix[0].size):
                     cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
@@ -158,6 +158,9 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     cost = 0
     mistake_count = 0
 
+    bledy_i_rodzaju = list([0] * _topology[-1])
+    bledy_ii_rodzaju = list([0] * _topology[-1])
+
     np.set_printoptions(suppress=True)
     for i in range(df_height):
         cost = 0
@@ -166,35 +169,43 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         print(network.layers[-1].output)
         for q in range(target_matrix[0].size):
             cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
-        if (np.where(target_matrix[i] == np.amax(target_matrix[i]))[0]) != \
-                (np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]):
+
+        guessed_class = np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]
+        correct_class = np.where(target_matrix[i] == np.amax(target_matrix[i]))[0]
+
+        if guessed_class != correct_class:
             mistake_count += 1
+            bledy_i_rodzaju[guessed_class[0]] += 1
+            bledy_ii_rodzaju[correct_class[0]] += 1
         avg_cost += cost
         costs.append(cost)
     avg_cost /= df_height
     print('\nAverage cost: ' + "%0.4f" % avg_cost)
     print('Mistakes count: ' + str(mistake_count))
+    print('Bledy I rodzaju: ' + str(bledy_i_rodzaju))
+    print('Bledy II rodzaju: ' + str(bledy_ii_rodzaju))
     print('Sample count: ' + str(df_height))
     print('Correctly guessed: ' + "%0.2f" % ((df_height - mistake_count) / df_height * 100) + "%")
+
 
     weights = list()
     for i in reversed(range(len(_topology))):
         weights.append(network.layers[i].weights)
 
-    print('wagi')
-    print(network.layers[0].weights)
-    print('bias')
-    print(network.layers[0].bias)
-    print('in')
-    print(network.layers[0].input)
-    print('out')
-    print(network.layers[0].output)
-    print('err')
-    print(network.layers[0].error)
-    print('vb')
-    print(network.layers[0].vb)
-    print('v')
-    print(network.layers[0].v)
+    # print('wagi')
+    # print(network.layers[0].weights)
+    # print('bias')
+    # print(network.layers[0].bias)
+    # print('in')
+    # print(network.layers[0].input)
+    # print('out')
+    # print(network.layers[0].output)
+    # print('err')
+    # print(network.layers[0].error)
+    # print('vb')
+    # print(network.layers[0].vb)
+    # print('v')
+    # print(network.layers[0].v)
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

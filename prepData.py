@@ -29,6 +29,8 @@ def xor():
 def iris():
     file = pd.read_csv('iris.data', header=None)
 
+    # file = file.sample(frac=1).reset_index(drop=True)
+
     file.loc[file[4] == 'Iris-setosa'] = 0
     file.loc[file[4] == 'Iris-versicolor'] = 1
     file.loc[file[4] == 'Iris-virginica'] = 2

@@ -12,7 +12,8 @@ def sigmoid_derivative(x):
     d = np.asmatrix(np.zeros((z, y)))
     for i in range(z):
         for j in range(y):
-            d[i, j] = x[i, j] * (1.0 - x[i, j])
+            # d[i, j] = x[i, j] * (1.0 - x[i, j])
+            d[i, j] = sigmoid(x[i, j]) * (1.0 - sigmoid(x[i, j]))
     return d
 
 
@@ -158,6 +159,10 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         network.errors(input_matrix[i].T, target_matrix[i].reshape(_topology[-1], 1))
         print("\n", target_matrix[i], ": ")
         print(network.layers[-1].output)
+        # encoder
+        # print('Output:')
+        # print(network.layers[0].output)
+
         for q in range(target_matrix[0].size):
             cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
 
@@ -177,6 +182,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     print('Bledy II rodzaju: ' + str(bledy_ii_rodzaju))
     print('Sample count: ' + str(df_height))
     print('Correctly guessed: ' + "%0.2f" % ((df_height - mistake_count) / df_height * 100) + "%")
+
+
 
 
     weights = list()

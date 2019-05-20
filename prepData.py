@@ -31,9 +31,9 @@ def iris():
 
     # file = file.sample(frac=1).reset_index(drop=True)
 
-    file.loc[file[4] == 'Iris-setosa'] = 0
-    file.loc[file[4] == 'Iris-versicolor'] = 1
-    file.loc[file[4] == 'Iris-virginica'] = 2
+    file.loc[file[4] == 'Iris-setosa', 4] = 0
+    file.loc[file[4] == 'Iris-versicolor', 4] = 1
+    file.loc[file[4] == 'Iris-virginica', 4] = 2
 
     train_data = file[file.index % 3 != 0]
     test_data = file[file.index % 3 == 0]

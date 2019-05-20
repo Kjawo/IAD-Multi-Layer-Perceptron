@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 import NeuralNetwork as nn
 import prepData
 
+# import importlib
+# importlib.reload(module)
+
 
 def digits():
     train_data = pd.read_csv('digits-data/digits-train.csv', header=None)
@@ -32,6 +35,14 @@ def digits():
     return train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix
 
 
+def showDigit(input_matrix, target_matrix):
+    label = np.where(target_matrix == np.amax(target_matrix))[0]
+    img = input_matrix.reshape((28, 28))
+    plt.imshow(img, cmap="Greys")
+    plt.title(label)
+    plt.show()
+
+
 start = time.time()
 
 topology = [50, 10]
@@ -44,9 +55,8 @@ sciezka = 'minist-digits-test'
 
 train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix = digits()
 
-nn.learn(1, topology, train_input_matrix, train_target_matrix, _lambda, _momentum, bias, 1, 0.001, sciezka, False)
-nn.test(test_input_matrix, test_target_matrix, topology, sciezka)
-# nn.test(train_input_matrix, train_target_matrix, topology, sciezka)
+# nn.learn(1, topology, train_input_matrix, train_target_matrix, _lambda, _momentum, bias, 1, 0.001, sciezka, False)
+# nn.test(test_input_matrix, test_target_matrix, topology, sciezka, False)
 
 end = time.time()
 print('\nExec time: ' + "%0.2f" % (end - start) + 's')

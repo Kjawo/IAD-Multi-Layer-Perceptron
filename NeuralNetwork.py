@@ -139,7 +139,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     pickle.dump(costs, open(_sciezka + "-costs", 'wb'))
 
 
-def test(input_matrix, target_matrix, _topology, _sciezka):
+def test(input_matrix, target_matrix, _topology, _sciezka, verbose):
     df_height, df_width = input_matrix.shape
     network = pickle.load(open(_sciezka, 'rb'))
 
@@ -157,8 +157,9 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
     for i in range(df_height):
         cost = 0
         network.errors(input_matrix[i].T, target_matrix[i].reshape(_topology[-1], 1))
-        print("\n", target_matrix[i], ": ")
-        print(network.layers[-1].output)
+        if verbose:
+            print("\n", target_matrix[i], ": ")
+            print(network.layers[-1].output)
         # encoder
         # print('Output:')
         # print(network.layers[0].output)

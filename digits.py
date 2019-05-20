@@ -35,8 +35,8 @@ def digits():
     return train_input_matrix, train_target_matrix, test_input_matrix, test_target_matrix
 
 
-def showDigit(input_matrix, target_matrix):
-    label = np.where(target_matrix == np.amax(target_matrix))[0]
+def showDigit(input_matrix, correct, guessed):
+    label = 'Correct: ' + str(correct) + ' Guessed: ' + str(guessed)
     img = input_matrix.reshape((28, 28))
     plt.imshow(img, cmap="Greys")
     plt.title(label)

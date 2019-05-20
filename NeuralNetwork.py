@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+import digits
 from tqdm import tqdm
 
 
@@ -174,6 +175,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose):
             mistake_count += 1
             bledy_i_rodzaju[correct_class[0]] += 1
             bledy_ii_rodzaju[guessed_class[0]] += 1
+
+            digits.showDigit(input_matrix[i], correct_class,  guessed_class)
         avg_cost += cost
         costs.append(cost)
 

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+from tqdm import tqdm
 
 
 def sigmoid(x):
@@ -103,12 +104,11 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     for i in range(_epoki):  # epoki
         cost = 0
 
-        for x in iterate_list:
+        for x in tqdm(iterate_list):
             network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), 2 * _lambda, _momentum)
             if (i % plot_step) == 0:
                 for q in range(_target_matrix[0].size):
                     cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
-
         np.random.shuffle(iterate_list)
         if (i % plot_step) == 0:
             ax.append(i)
@@ -169,13 +169,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka):
         guessed_class = np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]
         correct_class = np.where(target_matrix[i] == np.amax(target_matrix[i]))[0]
 
-        if guessed_class != correct_class:
+        if guessed_class.all() != correct_class.all():
             mistake_count += 1
             bledy_i_rodzaju[correct_class[0]] += 1
             bledy_ii_rodzaju[guessed_class[0]] += 1
         avg_cost += cost
         costs.append(cost)
-    avg_cost /= df_height
+
     print('\nAverage cost: ' + "%0.4f" % avg_cost)
     print('Mistakes count: ' + str(mistake_count))
     print('Bledy I rodzaju: ' + str(bledy_i_rodzaju))

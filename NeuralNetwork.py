@@ -86,8 +86,8 @@ class NeuralNetwork:
             self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
 
 
-def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, _bias, plot_step, _desired_cost,
-          _sciezka, continue_learing):
+def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
+          _desired_cost, _sciezka, continue_learing, plot_acc):
     df_height, df_width = _input_matrix.shape
 
     if continue_learing:
@@ -97,6 +97,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
 
     ax = list()
     ay = list()
+    # acc_x = list()
+    acc_y = list()
     fig = plt.figure()
 
     costs = list()
@@ -113,6 +115,18 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
                     cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
         np.random.shuffle(iterate_list)
         if (i % plot_step) == 0:
+            if plot_acc:
+                mistake_count = 0
+                for j in range(train_X.shape[0]):
+                    network.propagate_forward(train_X[j].T)
+
+                    guessed_class = np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]
+                    correct_class = np.where(train_Y[j] == np.amax(train_Y[j]))[0]
+
+                    if guessed_class.all() != correct_class.all():
+                        mistake_count += 1
+                acc_y.append(((df_height - mistake_count) / df_height * 100))
+
             ax.append(i)
             ay.append(float(cost))
             print(cost)
@@ -123,12 +137,13 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
 
     title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
 
-    plt.title(title)
-    plt.xlabel('Iteracja')
-    plt.ylabel('Koszt')
+    if plot_acc:
+        plt.title(title)
+        plt.xlabel('Iteration')
+        plt.ylabel('Accuracy')
 
-    plt.plot(ax[0:500], ay[0:500])
-    plt.show()
+        plt.plot(ax, acc_y)
+        plt.show()
 
     plt.title(title)
     plt.xlabel('Iteracja')

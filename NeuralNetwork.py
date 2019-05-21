@@ -1,6 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import pickle
+
+import matplotlib.pyplot as plt
+import numpy as np
 from tqdm import tqdm
 
 
@@ -105,7 +106,8 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
         cost = 0
 
         for x in tqdm(iterate_list):
-            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), 2 * _lambda, _momentum)
+            network.propagate_back(_input_matrix[x].T, _target_matrix[x].reshape(_topology[-1], 1), 2 * _lambda,
+                                   _momentum)
             if (i % plot_step) == 0:
                 for q in range(_target_matrix[0].size):
                     cost += (network.layers[-1].error[q, 0] * network.layers[-1].error[q, 0])
@@ -186,9 +188,6 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     print('Bledy II rodzaju: ' + str(bledy_ii_rodzaju))
     print('Sample count: ' + str(df_height))
     print('Correctly guessed: ' + "%0.2f" % ((df_height - mistake_count) / df_height * 100) + "%")
-
-
-
 
     weights = list()
     for i in reversed(range(len(_topology))):

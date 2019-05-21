@@ -1,11 +1,7 @@
 import time
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import digits_functions
 import NeuralNetwork as nn
-import prepData
+import digits_functions
 
 # import importlib
 # importlib.reload(module)

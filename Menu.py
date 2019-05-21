@@ -1,16 +1,9 @@
-import numpy as np
-import sns as sns
+import time
 
 import NeuralNetwork as nn
 import prepData
-import matplotlib.pyplot as plt
-import pickle
-import pandas as pd
-import time
-
 
 start = time.time()
-
 
 topology = [6, 3]
 bias = True

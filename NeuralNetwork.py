@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
-import digits
 from tqdm import tqdm
 
 
@@ -140,7 +139,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, _lambda, _momentum, 
     pickle.dump(costs, open(_sciezka + "-costs", 'wb'))
 
 
-def test(input_matrix, target_matrix, _topology, _sciezka, verbose):
+def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     df_height, df_width = input_matrix.shape
     network = pickle.load(open(_sciezka, 'rb'))
 
@@ -175,8 +174,9 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose):
             mistake_count += 1
             bledy_i_rodzaju[correct_class[0]] += 1
             bledy_ii_rodzaju[guessed_class[0]] += 1
-
-            digits.showDigit(input_matrix[i], correct_class,  guessed_class)
+            if is_digit:
+                import digits_functions
+                digits_functions.showDigit(input_matrix[i], correct_class, guessed_class)
         avg_cost += cost
         costs.append(cost)
 

@@ -5,15 +5,17 @@ from PIL import Image
 from matplotlib import image
 from matplotlib import pyplot as plt
 
+image_path = 'digit3.png'
+network_path = 'minist-digits-test3'
 
-three = Image.open('digit3.png')
+three = Image.open(image_path)
 three.thumbnail((28, 28))
 three = three.convert(mode='L')
-three.save('digit3-prepared.png')
+three.save('prepared-' + image_path)
 
 print(three.size)
 
-data = image.imread('digit3-prepared.png')
+data = image.imread('prepared-' + image_path)
 
 
 # summarize shape of the pixel array
@@ -25,7 +27,7 @@ plt.imshow(data, cmap="Greys")
 
 data = data.reshape((1, 784))
 
-network = pickle.load(open('minist-digits-test3', 'rb'))
+network = pickle.load(open(network_path, 'rb'))
 network.propagate_forward(data.T)
 guessed_class = np.where(network.layers[-1].output == np.amax(network.layers[-1].output))[0]
 plt.title('Guessed: ' + str(guessed_class))

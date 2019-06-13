@@ -134,15 +134,18 @@ def sqrt_data(betweenZeroAndOne):
     y = np.sqrt(x)
 
     if betweenZeroAndOne:
-        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
         y = np.interp(y, (y.min(), y.max()), (0, +1))
+
+    x.shape = [x.shape[0], 1]
+    y.shape = [y.shape[0], 1]
 
     test_x = x[::3]
     test_y = y[::3]
     x = np.delete(x, np.arange(0, x.size, 3))
     y = np.delete(y, np.arange(0, y.size, 3))
-    train_x = x
-    train_y = y
+    train_x = x.reshape(x.shape[0], 1)
+    train_y = y.reshape(y.shape[0], 1)
 
     return train_x, train_y, test_x, test_y
 
@@ -157,9 +160,11 @@ def sin_data(betweenZeroAndOne):
     y = np.sin(x)
 
     if betweenZeroAndOne:
-        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
         y = np.interp(y, (y.min(), y.max()), (0, +1))
 
+    x.shape = [x.shape[0], 1]
+    y.shape = [y.shape[0], 1]
 
     test_x = x[::3]
     test_y = y[::3]
@@ -169,4 +174,34 @@ def sin_data(betweenZeroAndOne):
     train_y = y
 
     return train_x, train_y, test_x, test_y
+
+
+def sin_cos_data(betweenZeroAndOne):
+    #sin(x1 * x2) + cos(3*(x1 - x2)) na przedziale x1: [-3, 3], x2: [-3, 3]
+    x = []
+    y = np.array([])
+
+    for i in np.arange(-3.0, 3.0, 6.0/100):
+        for j in np.arange(-3.0, 3.0, 6.0 / 100):
+            x.append([i, j])
+    x = np.array(x)
+
+    y = np.sin(x[:, 0] * x[:, 1]) + np.cos(3*(x[:, 0] - x[:, 1]))
+
+    # if betweenZeroAndOne:
+    #     # x = np.interp(x, (x.min(), x.max()), (0, +1))
+    #     y = np.interp(y, (y.min(), y.max()), (0, +1))
+    #
+    # x1.shape = [x1.shape[0], 1]
+    # y.shape = [y.shape[0], 1]
+    #
+    # test_x = x[::3]
+    # test_y = y[::3]
+    # x = np.delete(x, np.arange(0, x.size, 3))
+    # y = np.delete(y, np.arange(0, y.size, 3))
+    # train_x = x
+    # train_y = y
+
+    # return train_x, train_y, test_x, test_y
+    return x,y,x,y
 

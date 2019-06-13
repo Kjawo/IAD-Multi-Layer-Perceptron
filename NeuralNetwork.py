@@ -88,9 +88,9 @@ class NeuralNetwork:
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
           _desired_cost, _sciezka, continue_learing, plot_acc):
-    # df_height, df_width = _input_matrix.shape
-    df_height = _input_matrix.shape[0]
-    df_width = 1
+    df_height, df_width = _input_matrix.shape
+    # df_height = _input_matrix.shape[0]
+    # df_width = 1
 
     if continue_learing:
         network = pickle.load(open(_sciezka, 'rb'))
@@ -159,9 +159,9 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
 
 
 def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
-    # df_height, df_width = input_matrix.shape
-    df_height = input_matrix.shape[0]
-    df_width = 1
+    df_height, df_width = input_matrix.shape
+    # df_height = input_matrix.shape[0]
+    # df_width = 1
     network = pickle.load(open(_sciezka, 'rb'))
 
     costs = list()

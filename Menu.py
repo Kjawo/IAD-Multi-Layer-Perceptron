@@ -28,6 +28,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 plt.show()
+
 # nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
 # nn.test(test_X, test_Y, topology, sciezka, False, False)
 

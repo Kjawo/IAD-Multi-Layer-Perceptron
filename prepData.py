@@ -122,3 +122,51 @@ def knn_seeds():
         df['type'], random_state=0)
 
     return X_train, X_test, Y_train, Y_test
+
+
+def sqrt_data(betweenZeroAndOne):
+    x = np.array([])
+    y = np.array([])
+
+    for i in np.arange(0, 10.0, 10.0/3000):
+        x = np.append(x, i)
+
+    y = np.sqrt(x)
+
+    if betweenZeroAndOne:
+        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        y = np.interp(y, (y.min(), y.max()), (0, +1))
+
+    test_x = x[::3]
+    test_y = y[::3]
+    x = np.delete(x, np.arange(0, x.size, 3))
+    y = np.delete(y, np.arange(0, y.size, 3))
+    train_x = x
+    train_y = y
+
+    return train_x, train_y, test_x, test_y
+
+
+def sin_data(betweenZeroAndOne):
+    x = np.array([])
+    y = np.array([])
+
+    for i in np.arange(-10.0, 10.0, 20.0/3000):
+        x = np.append(x, i)
+
+    y = np.sin(x)
+
+    if betweenZeroAndOne:
+        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        y = np.interp(y, (y.min(), y.max()), (0, +1))
+
+
+    test_x = x[::3]
+    test_y = y[::3]
+    x = np.delete(x, np.arange(0, x.size, 3))
+    y = np.delete(y, np.arange(0, y.size, 3))
+    train_x = x
+    train_y = y
+
+    return train_x, train_y, test_x, test_y
+

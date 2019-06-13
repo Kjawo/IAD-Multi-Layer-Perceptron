@@ -6,7 +6,8 @@ from PIL import Image
 from matplotlib import image
 from matplotlib import pyplot as plt
 
-hog = True
+hog = False
+# hog = True
 
 if hog:
     digit, hog_of_digit = digits_functions.prep_image_hog('digit3.png')
@@ -20,7 +21,7 @@ digit = digit.reshape((1, 784))
 if hog:
     network_path = 'minist-digits-hog-50'
 else:
-    network_path = 'minist-digits-test3'
+    network_path = 'minist-digits-50'
 
 network = pickle.load(open(network_path, 'rb'))
 

@@ -88,7 +88,9 @@ class NeuralNetwork:
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
           _desired_cost, _sciezka, continue_learing, plot_acc):
-    df_height, df_width = _input_matrix.shape
+    # df_height, df_width = _input_matrix.shape
+    df_height = _input_matrix.shape[0]
+    df_width = 1
 
     if continue_learing:
         network = pickle.load(open(_sciezka, 'rb'))
@@ -135,7 +137,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
                 print('Osiągnięto zadany błąd\nIteracja: ', i)
                 break
 
-    title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum)
+    title = 'Lambda = ' + str(_lambda) + '    Momentum = ' + str(_momentum) + "width: " + str(df_width)
 
     if plot_acc:
         plt.title(title)
@@ -157,7 +159,9 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
 
 
 def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
-    df_height, df_width = input_matrix.shape
+    # df_height, df_width = input_matrix.shape
+    df_height = input_matrix.shape[0]
+    df_width = 1
     network = pickle.load(open(_sciezka, 'rb'))
 
     costs = list()
@@ -169,6 +173,10 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
 
     bledy_i_rodzaju = list([0] * _topology[-1])
     bledy_ii_rodzaju = list([0] * _topology[-1])
+
+    ax = list()
+    ay = list()
+    fig = plt.figure()
 
     np.set_printoptions(suppress=True)
     for i in range(df_height):
@@ -196,6 +204,9 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
                 digits_functions.showDigit(input_matrix[i], correct_class, guessed_class)
         avg_cost += cost
         costs.append(cost)
+        ax.append(input_matrix[i])
+        # ay.append(target_matrix[i])
+        ay.append(network.layers[-1].output.__float__())
 
     print('\nAverage cost: ' + "%0.4f" % avg_cost)
     print('Mistakes count: ' + str(mistake_count))
@@ -222,6 +233,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     # print(network.layers[0].weight_change_bias)
     # print('v')
     # print(network.layers[0].v)
+
+
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+    plt.plot(ax, ay)
+    plt.show()
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

@@ -134,7 +134,7 @@ def sqrt_data(betweenZeroAndOne):
     y = np.sqrt(x)
 
     if betweenZeroAndOne:
-        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
         y = np.interp(y, (y.min(), y.max()), (0, +1))
 
     test_x = x[::3]
@@ -157,7 +157,7 @@ def sin_data(betweenZeroAndOne):
     y = np.sin(x)
 
     if betweenZeroAndOne:
-        x = np.interp(x, (x.min(), x.max()), (0, +1))
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
         y = np.interp(y, (y.min(), y.max()), (0, +1))
 
 

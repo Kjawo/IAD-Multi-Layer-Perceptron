@@ -40,12 +40,12 @@ class NeuronLayer:
         self.weight_change_bias = np.asmatrix(np.zeros((neurons_count, 1)))
 
     def rbf_outputs(self):
-        for i in range(self.weights.shape[0]-1):
+        for i in range(self.weights.shape[0]):
             sum = 0
 
-            for j in range(self.weights.shape[1]-1):
-                print(i,j)
-                sum += np.power(self.weights[i][j] - self.input[i][j], 2)
+            for j in range(self.weights.shape[1]):
+                print(i, j)
+                sum += np.power(self.weights.item(i, j) - self.input.item(i, j), 2)
 
             self.output[i] = np.exp(-self.bias[i] * sum)
 

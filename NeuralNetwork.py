@@ -134,7 +134,7 @@ class NeuralNetwork:
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
-          _desired_cost, _sciezka, continue_learing, plot_acc, rbf_topology):
+          _desired_cost, _sciezka, continue_learing, plot_acc):
     df_height, df_width = _input_matrix.shape
     # df_height = _input_matrix.shape[0]
     # df_width = 1
@@ -142,7 +142,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
     if continue_learing:
         network = pickle.load(open(_sciezka, 'rb'))
     else:
-        network = NeuralNetwork(_topology, _bias, df_width, rbf_topology)
+        network = NeuralNetwork(_topology, _bias, df_width)
 
     ax = list()
     ay = list()
@@ -205,7 +205,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
     pickle.dump(costs, open(_sciezka + "-costs", 'wb'))
 
 
-def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
+def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit, how_many_dimensions):
     df_height, df_width = input_matrix.shape
     # df_height = input_matrix.shape[0]
     # df_width = 1
@@ -221,10 +221,15 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     bledy_i_rodzaju = list([0] * _topology[-1])
     bledy_ii_rodzaju = list([0] * _topology[-1])
 
-    # if df_width == 1:
-    ax = list()
-    ay = list()
-    fig = plt.figure()
+    if how_many_dimensions == 1:
+        ax = list()
+        ay = list()
+        fig = plt.figure()
+
+    if how_many_dimensions == 2:
+        ax = []
+        ay = []
+        fig = plt.figure()
 
     np.set_printoptions(suppress=True)
     for i in range(df_height):
@@ -252,9 +257,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
                 digits_functions.showDigit(input_matrix[i], correct_class, guessed_class)
         avg_cost += cost
         costs.append(cost)
-        ax.append(input_matrix[i])
-        # ay.append(target_matrix[i])
-        ay.append(network.layers[-1].output.__float__())
+        if how_many_dimensions == 1:
+            ax.append(input_matrix[i])
+            ay.append(network.layers[-1].output.__float__())
+
+        if how_many_dimensions == 2:
+            ax.append(input_matrix[i])
+            ay.append(network.layers[-1].output.__float__())
 
     print('\nAverage cost: ' + "%0.4f" % avg_cost)
     print('Mistakes count: ' + str(mistake_count))
@@ -282,7 +291,7 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     # print('v')
     # print(network.layers[0].v)
 
-    if df_width == 1:
+    if how_many_dimensions == 1:
         plt.xlabel('x')
         plt.ylabel('y')
 
@@ -290,11 +299,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
         plt.plot(input_matrix, target_matrix, 'b+')
         plt.show()
 
-    # if df_width == 2:
-    #     fig = plt.figure()
-    #     ax = fig.add_subplot(111, projection='3d')
-    #     ax.scatter(input_matrix[:, 0], input_matrix[:, 1], target_matrix)
-    #     plt.show()
+    if how_many_dimensions == 2:
+        ax = np.concatenate(ax).astype(None)
+        fig = plt.figure()
+        figure = fig.add_subplot(111, projection='3d')
+        figure.scatter(ax[:, 0], ax[:, 1], ay)
+        plt.show()
+
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

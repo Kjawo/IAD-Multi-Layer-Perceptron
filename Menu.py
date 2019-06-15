@@ -22,8 +22,7 @@ sciezka = 'test'
 # nn.test(test_X, test_Y, topology, sciezka, False, False)
 
 train_X, train_Y, test_X, test_Y = prepData.sin_cos_data(True)
-train_Y = train_Y.T
-test_Y = test_Y.T
+
 # plt.plot(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 
@@ -32,9 +31,8 @@ test_Y = test_Y.T
 # ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 #
-nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
-         rbf_topology)
-nn.test(test_X, test_Y, topology, sciezka, False, False)
+nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
+nn.test(test_X, test_Y, topology, sciezka, False, False, train_X.shape[1])
 
 end = time.time()
 print('\nExec time: ' + "%0.2f" % (end - start) + 's')

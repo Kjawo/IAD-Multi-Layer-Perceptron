@@ -193,7 +193,8 @@ def sin_cos_data(betweenZeroAndOne):
     train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
     train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
 
+
     # train_x.reshape(train_x.shape[0], 2)
     # train_y.reshape(train_y.shape[0], 1)
 
-    return np.asmatrix(train_x), np.asmatrix(train_y), np.asmatrix(test_x), np.asmatrix(test_y)
+    return np.asmatrix(train_x), np.asmatrix(train_y).T, np.asmatrix(test_x), np.asmatrix(test_y).T

@@ -134,7 +134,7 @@ class NeuralNetwork:
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
-          _desired_cost, _sciezka, continue_learing, plot_acc):
+          _desired_cost, _sciezka, continue_learing, plot_acc,rbf_topology):
     df_height, df_width = _input_matrix.shape
     # df_height = _input_matrix.shape[0]
     # df_width = 1
@@ -142,7 +142,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
     if continue_learing:
         network = pickle.load(open(_sciezka, 'rb'))
     else:
-        network = NeuralNetwork(_topology, _bias, df_width)
+        network = NeuralNetwork(_topology, _bias, df_width, rbf_topology)
 
     ax = list()
     ay = list()

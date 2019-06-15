@@ -29,23 +29,24 @@ class NeuronLayer:
         else:
             self.bias_value = 0
         if rbf_topology:
-            self.bias = (2 * np.asmatrix(np.random.random((neurons_count, 1)))) / 2
+            self.bias = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron)))) / 2
         else:
             self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
-        self.output = np.asmatrix(np.zeros((neurons_count, 1)))
+        self.output = np.asmatrix([])
         self.error = np.matrix([])
         self.weight_change = np.asmatrix(np.zeros((neurons_count, inputs_per_neuron)))
         self.weight_change_bias = np.asmatrix(np.zeros((neurons_count, 1)))
 
     def rbf_outputs(self):
-        for i in range(0, self.weights.shape[0]):
+        for i in range(self.weights.shape[0]-1):
             sum = 0
 
-            for j in range(0, self.weights.shape[1]):
-                diff = (self.weights[i].item(j) - self.input[j])
-                sum = sum + pow(diff, 2)
+            for j in range(self.weights.shape[1]-1):
+                print(i,j)
+                sum += np.power(self.weights[i][j] - self.input[i][j], 2)
+
             self.output[i] = np.exp(-self.bias[i] * sum)
 
 
@@ -133,7 +134,7 @@ class NeuralNetwork:
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
-          _desired_cost, _sciezka, continue_learing, plot_acc, rbf_topology):
+          _desired_cost, _sciezka, continue_learing, plot_acc,rbf_topology):
     df_height, df_width = _input_matrix.shape
     # df_height = _input_matrix.shape[0]
     # df_width = 1
@@ -304,6 +305,7 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit, ho
         figure = fig.add_subplot(111, projection='3d')
         figure.scatter(ax[:, 0], ax[:, 1], ay)
         plt.show()
+
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

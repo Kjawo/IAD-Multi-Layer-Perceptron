@@ -128,7 +128,7 @@ def sqrt_data(betweenZeroAndOne):
     x = np.array([])
     y = np.array([])
 
-    for i in np.arange(0, 10.0, 10.0/3000):
+    for i in np.arange(0, 10.0, 10.0 / 3000):
         x = np.append(x, i)
 
     y = np.sqrt(x)
@@ -142,10 +142,8 @@ def sqrt_data(betweenZeroAndOne):
 
     test_x = x[::3]
     test_y = y[::3]
-    x = np.delete(x, np.arange(0, x.size, 3))
-    y = np.delete(y, np.arange(0, y.size, 3))
-    train_x = x.reshape(x.shape[0], 1)
-    train_y = y.reshape(y.shape[0], 1)
+    train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
+    train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
 
     return train_x, train_y, test_x, test_y
 
@@ -154,7 +152,7 @@ def sin_data(betweenZeroAndOne):
     x = np.array([])
     y = np.array([])
 
-    for i in np.arange(-10.0, 10.0, 20.0/3000):
+    for i in np.arange(-10.0, 10.0, 20.0 / 3000):
         x = np.append(x, i)
 
     y = np.sin(x)
@@ -168,38 +166,34 @@ def sin_data(betweenZeroAndOne):
 
     test_x = x[::3]
     test_y = y[::3]
-    x = np.delete(x, np.arange(0, x.size, 3))
-    y = np.delete(y, np.arange(0, y.size, 3))
-    train_x = x
-    train_y = y
+    train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
+    train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
 
     return train_x, train_y, test_x, test_y
 
 
 def sin_cos_data(betweenZeroAndOne):
-    #sin(x1 * x2) + cos(3*(x1 - x2)) na przedziale x1: [-3, 3], x2: [-3, 3]
+    # sin(x1 * x2) + cos(3*(x1 - x2)) na przedziale x1: [-3, 3], x2: [-3,duall 3]
     x = []
     y = np.array([])
 
-    for i in np.arange(-3.0, 3.0, 6.0/100):
+    for i in np.arange(-3.0, 3.0, 6.0 / 100):
         for j in np.arange(-3.0, 3.0, 6.0 / 100):
             x.append([i, j])
     x = np.array(x)
 
-    y = np.sin(x[:, 0] * x[:, 1]) + np.cos(3*(x[:, 0] - x[:, 1]))
+    y = np.sin(x[:, 0] * x[:, 1]) + np.cos(3 * (x[:, 0] - x[:, 1]))
 
     if betweenZeroAndOne:
         # x = np.interp(x, (x.min(), x.max()), (0, +1))
         y = np.interp(y, (y.min(), y.max()), (0, +1))
 
-
     test_x = x[::3]
     test_y = y[::3]
-    x = np.delete(x, np.arange(0, x.size, 3))
-    y = np.delete(y, np.arange(0, y.size, 3))
-    train_x = x
-    train_y = y
+    train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
+    train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
+
+    # train_x.reshape(train_x.shape[0], 2)
+    # train_y.reshape(train_y.shape[0], 1)
 
     return train_x, train_y, test_x, test_y
-    # return x,y,x,y
-

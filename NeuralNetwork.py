@@ -238,7 +238,8 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     plt.xlabel('x')
     plt.ylabel('y')
 
-    plt.plot(ax, ay)
+    plt.scatter(ax, ay, marker='+', c='r')
+    plt.plot(input_matrix, target_matrix, 'b+')
     plt.show()
 
     test_data = {'Input matrix': input_matrix,

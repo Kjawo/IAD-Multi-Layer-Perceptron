@@ -20,7 +20,9 @@ sciezka = 'test'
 # nn.learn(100, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
 # nn.test(test_X, test_Y, topology, sciezka, False, False)
 
-train_X, train_Y, test_X, test_Y = prepData.sin_data(True)
+train_X, train_Y, test_X, test_Y = prepData.sin_cos_data(True)
+train_Y = train_Y.T
+test_Y = test_Y.T
 # plt.plot(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 
@@ -29,7 +31,7 @@ train_X, train_Y, test_X, test_Y = prepData.sin_data(True)
 # ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 #
-nn.learn(40, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
+nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
 nn.test(test_X, test_Y, topology, sciezka, False, False)
 
 end = time.time()

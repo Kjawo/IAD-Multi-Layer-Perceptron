@@ -196,4 +196,4 @@ def sin_cos_data(betweenZeroAndOne):
     # train_x.reshape(train_x.shape[0], 2)
     # train_y.reshape(train_y.shape[0], 1)
 
-    return train_x, train_y, test_x, test_y
+    return np.asmatrix(train_x), np.asmatrix(train_y), np.asmatrix(test_x), np.asmatrix(test_y)

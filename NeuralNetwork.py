@@ -174,9 +174,10 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     bledy_i_rodzaju = list([0] * _topology[-1])
     bledy_ii_rodzaju = list([0] * _topology[-1])
 
-    ax = list()
-    ay = list()
-    fig = plt.figure()
+    if df_width == 1:
+        ax = list()
+        ay = list()
+        fig = plt.figure()
 
     np.set_printoptions(suppress=True)
     for i in range(df_height):
@@ -241,6 +242,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
         plt.scatter(ax, ay, marker='+', c='r')
         plt.plot(input_matrix, target_matrix, 'b+')
         plt.show()
+
+    # if df_width == 2:
+    #     fig = plt.figure()
+    #     ax = fig.add_subplot(111, projection='3d')
+    #     ax.scatter(input_matrix[:, 0], input_matrix[:, 1], target_matrix)
+    #     plt.show()
+
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

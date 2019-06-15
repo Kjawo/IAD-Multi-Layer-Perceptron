@@ -20,21 +20,34 @@ def sigmoid_derivative(x):
 
 
 class NeuronLayer:
-    def __init__(self, neurons_count, inputs_per_neuron, is_Bias):
+    def __init__(self, neurons_count, inputs_per_neuron, is_Bias, rbf_topology):
+        self.rbf = rbf_topology
         self.weights = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron))) - 1) / 2
         # self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
-        self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
         if is_Bias:
             self.bias_value = 1
         else:
             self.bias_value = 0
-
+        if rbf_topology:
+            self.bias = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron)))) / 2
+        else:
+            self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix([])
         self.error = np.matrix([])
         self.weight_change = np.asmatrix(np.zeros((neurons_count, inputs_per_neuron)))
         self.weight_change_bias = np.asmatrix(np.zeros((neurons_count, 1)))
+
+    def rbf_outputs(self):
+        for i in range(self.weights.shape[0]-1):
+            sum = 0
+
+            for j in range(self.weights.shape[1]-1):
+                print(i,j)
+                sum += np.power(self.weights[i][j] - self.input[i][j], 2)
+
+            self.output[i] = np.exp(-self.bias[i] * sum)
 
 
 # obj.T -> transponowanie macierzy
@@ -43,20 +56,31 @@ class NeuronLayer:
 
 class NeuralNetwork:
 
-    def __init__(self, topology, bias, input_size):
+    def __init__(self, topology, bias, input_size, rbf_topology):
         # self.layers = list(range(np.size(input_matrix, 0)))
         self.layers = list([None] * np.size(topology))
-        self.layers[0] = NeuronLayer(topology[0], input_size, bias)
+        self.layers[0] = NeuronLayer(topology[0], input_size, bias, rbf_topology[0])
         for i in range(1, len(topology)):
-            self.layers[i] = NeuronLayer(topology[i], topology[i - 1], bias)
+            self.layers[i] = NeuronLayer(topology[i], topology[i - 1], bias, rbf_topology[i])
 
     def propagate_forward(self, input_matrix):
-        self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias * self.layers[0].bias_value
-        self.layers[0].output = sigmoid(self.layers[0].input)
+
+        if (self.layers[0].rbf == False):
+            self.layers[0].input = self.layers[0].weights * input_matrix + self.layers[0].bias * self.layers[
+                0].bias_value
+            self.layers[0].output = sigmoid(self.layers[0].input)
+        else:
+            self.layers[0].input = input_matrix
+            self.layers[0].rbf_outputs()
+
         for i in range(1, len(self.layers)):
-            self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias * \
-                                   self.layers[i].bias_value
-            self.layers[i].output = sigmoid(self.layers[i].input)
+            if (self.layers[i].rbf == False):
+                self.layers[i].input = self.layers[i].weights * self.layers[i - 1].output + self.layers[i].bias * \
+                                       self.layers[i].bias_value
+                self.layers[i].output = sigmoid(self.layers[i].input)
+            else:
+                self.layers[i].input = self.layers[i - 1]
+                self.layers[i].rbf_outputs()
 
     def errors(self, input_matrix, target_matrix):
         self.propagate_forward(input_matrix)
@@ -66,28 +90,51 @@ class NeuralNetwork:
                 sigmoid_derivative(self.layers[i + 1].output)) * self.layers[i + 1].error
 
     def propagate_back(self, input_matrix, target_matrix, _lambda, _momentum):
-        self.errors(input_matrix, target_matrix)
-        self.layers[0].weight_change = _lambda * np.multiply(
-            sigmoid_derivative(self.layers[0].output),
-            self.layers[0].error) * input_matrix.T + _momentum * self.layers[0].weight_change
-        self.layers[0].weight_change_bias = _lambda * np.multiply(
-            sigmoid_derivative(self.layers[0].output),
-            self.layers[0].error) + _momentum * self.layers[0].weight_change_bias
-        self.layers[0].weights = self.layers[0].weights + self.layers[0].weight_change
-        self.layers[0].bias = self.layers[0].bias + self.layers[0].weight_change_bias
+
+        if (self.layers[0].rbf == False):
+            self.errors(input_matrix, target_matrix)
+            self.layers[0].weight_change = _lambda * np.multiply(
+                sigmoid_derivative(self.layers[0].output),
+                self.layers[0].error) * input_matrix.T + _momentum * self.layers[0].weight_change
+            self.layers[0].weight_change_bias = _lambda * np.multiply(
+                sigmoid_derivative(self.layers[0].output),
+                self.layers[0].error) + _momentum * self.layers[0].weight_change_bias
+            self.layers[0].weights = self.layers[0].weights + self.layers[0].weight_change
+            self.layers[0].bias = self.layers[0].bias + self.layers[0].weight_change_bias
+        else:
+            self.errors(input_matrix, target_matrix)
+            self.layers[0].weight_change = _lambda * np.multiply(
+                sigmoid_derivative(self.layers[0].output),
+                self.layers[0].error) * input_matrix.T + _momentum * self.layers[0].weight_change
+            self.layers[0].weight_change_bias = _lambda * np.multiply(
+                sigmoid_derivative(self.layers[0].output),
+                self.layers[0].error) + _momentum * self.layers[0].weight_change_bias
+            self.layers[0].weights = self.layers[0].weights + self.layers[0].weight_change
+            self.layers[0].bias = self.layers[0].bias + self.layers[0].weight_change_bias
+
         for i in range(1, len(self.layers)):
-            self.layers[i].weight_change = _lambda * np.multiply(
-                sigmoid_derivative(self.layers[i].output),
-                self.layers[i].error) * self.layers[i - 1].output.T + _momentum * self.layers[i].weight_change
-            self.layers[i].weight_change_bias = _lambda * np.multiply(
-                sigmoid_derivative(self.layers[i].output),
-                self.layers[i].error) + _momentum * self.layers[i].weight_change_bias
-            self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
-            self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
+            if (self.layers[i].rbf == False):
+                self.layers[i].weight_change = _lambda * np.multiply(
+                    sigmoid_derivative(self.layers[i].output),
+                    self.layers[i].error) * self.layers[i - 1].output.T + _momentum * self.layers[i].weight_change
+                self.layers[i].weight_change_bias = _lambda * np.multiply(
+                    sigmoid_derivative(self.layers[i].output),
+                    self.layers[i].error) + _momentum * self.layers[i].weight_change_bias
+                self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
+                self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
+            else:
+                self.layers[i].weight_change = _lambda * np.multiply(
+                    sigmoid_derivative(self.layers[i].output),
+                    self.layers[i].error) * self.layers[i - 1].output.T + _momentum * self.layers[i].weight_change
+                self.layers[i].weight_change_bias = _lambda * np.multiply(
+                    sigmoid_derivative(self.layers[i].output),
+                    self.layers[i].error) + _momentum * self.layers[i].weight_change_bias
+                self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
+                self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias, plot_step,
-          _desired_cost, _sciezka, continue_learing, plot_acc):
+          _desired_cost, _sciezka, continue_learing, plot_acc, rbf_topology):
     df_height, df_width = _input_matrix.shape
     # df_height = _input_matrix.shape[0]
     # df_width = 1
@@ -95,7 +142,7 @@ def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _l
     if continue_learing:
         network = pickle.load(open(_sciezka, 'rb'))
     else:
-        network = NeuralNetwork(_topology, _bias, df_width)
+        network = NeuralNetwork(_topology, _bias, df_width, rbf_topology)
 
     ax = list()
     ay = list()
@@ -174,10 +221,10 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     bledy_i_rodzaju = list([0] * _topology[-1])
     bledy_ii_rodzaju = list([0] * _topology[-1])
 
-    if df_width == 1:
-        ax = list()
-        ay = list()
-        fig = plt.figure()
+    # if df_width == 1:
+    ax = list()
+    ay = list()
+    fig = plt.figure()
 
     np.set_printoptions(suppress=True)
     for i in range(df_height):
@@ -248,7 +295,6 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     #     ax = fig.add_subplot(111, projection='3d')
     #     ax.scatter(input_matrix[:, 0], input_matrix[:, 1], target_matrix)
     #     plt.show()
-
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

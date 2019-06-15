@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 start = time.time()
 
 topology = [64, 1]
+rbf_topology = [True, False]
 bias = True
 _lambda = 0.3
 _momentum = 0.6
@@ -31,7 +32,8 @@ test_Y = test_Y.T
 # ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 #
-nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
+nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
+         rbf_topology)
 nn.test(test_X, test_Y, topology, sciezka, False, False)
 
 end = time.time()

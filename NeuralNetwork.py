@@ -234,13 +234,13 @@ def test(input_matrix, target_matrix, _topology, _sciezka, verbose, is_digit):
     # print('v')
     # print(network.layers[0].v)
 
+    if df_width == 1:
+        plt.xlabel('x')
+        plt.ylabel('y')
 
-    plt.xlabel('x')
-    plt.ylabel('y')
-
-    plt.scatter(ax, ay, marker='+', c='r')
-    plt.plot(input_matrix, target_matrix, 'b+')
-    plt.show()
+        plt.scatter(ax, ay, marker='+', c='r')
+        plt.plot(input_matrix, target_matrix, 'b+')
+        plt.show()
 
     test_data = {'Input matrix': input_matrix,
                  'Weights': weights,

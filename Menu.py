@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 start = time.time()
 
 topology = [64, 1]
-rbf_topology = [True, False]
+rbf_topology = [False, False]
 bias = True
 _lambda = 0.3
 _momentum = 0.6

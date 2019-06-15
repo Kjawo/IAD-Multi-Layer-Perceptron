@@ -29,23 +29,22 @@ class NeuronLayer:
         else:
             self.bias_value = 0
         if rbf_topology:
-            self.bias = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron)))) / 2
+            self.bias = (2 * np.asmatrix(np.random.random((neurons_count, 1)))) / 2
         else:
             self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
-        self.output = np.asmatrix([])
+        self.output = np.asmatrix(np.zeros((neurons_count, 1)))
         self.error = np.matrix([])
         self.weight_change = np.asmatrix(np.zeros((neurons_count, inputs_per_neuron)))
         self.weight_change_bias = np.asmatrix(np.zeros((neurons_count, 1)))
 
     def rbf_outputs(self):
-        for i in range(self.weights.shape[0]-1):
+        for i in range(0,self.weights.shape[0]):
             sum = 0
 
-            for j in range(self.weights.shape[1]-1):
-                print(i,j)
-                sum += np.power(self.weights[i][j] - self.input[i][j], 2)
+            for j in range(0, self.weights.shape[1]):
+                sum += pow(self.weights.item(i, j) - self.input.item(j), 2)
 
             self.output[i] = np.exp(-self.bias[i] * sum)
 

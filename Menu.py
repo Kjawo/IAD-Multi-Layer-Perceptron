@@ -11,7 +11,7 @@ topology = [64, 1]
 rbf_topology = [True, False]
 bias = True
 _lambda = 0.1
-_momentum = 0.2
+_momentum = 0.3
 sciezka = 'test'
 
 # train_X, train_Y, test_X, test_Y = prepData.iris()
@@ -33,7 +33,7 @@ train_X, train_Y, test_X, test_Y = prepData.sin_data(True)
 #
 nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
          rbf_topology)
-# nn.test(test_X, test_Y, topology, sciezka, False, False, train_X.shape[1])
+nn.test(test_X, test_Y, topology, sciezka, False, False, train_X.shape[1])
 
 end = time.time()
 print('\nExec time: ' + "%0.2f" % (end - start) + 's')

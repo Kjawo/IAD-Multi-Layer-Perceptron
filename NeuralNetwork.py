@@ -35,7 +35,7 @@ class NeuronLayer:
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix(np.zeros((neurons_count, 1)))
-        self.error = np.matrix(np.zeros((neurons_count, 1)))
+        self.error = np.matrix([])
         self.weight_change = np.asmatrix(np.zeros((neurons_count, inputs_per_neuron)))
         self.weight_change_bias = np.asmatrix(np.zeros((neurons_count, 1)))
 
@@ -59,19 +59,18 @@ class NeuronLayer:
 
             self.error[i] = -sum1
 
-    def rbf_weights_changes(self, input, errors2, output2):
+    def rbf_weights_changes(self, inputs, errors2, output2):
         for i in range(0, self.input.shape[0]):
             for j in range(0, self.output.shape[1]):
-                # print(input)
-                self.weight_change -= -errors2.item(i) * sigmoid_derivative(output2)[i] * output2[i] * (
-                    -self.bias.item(i)) * 2 * (input[j] - self.weights.item(i, j)) * (-1)
+                self.weight_change[i][j] -= -errors2[i] * sigmoid_derivative(output2)[i] * output2[i] * (
+                    -self.bias[i]) * 2 * (inputs[j] - self.weights[i][j]) * (-1)
 
         for i in range(0, self.input.shape[0]):
             sum = 0
             for j in range(0, self.output.shape[1]):
-                sum += pow(input[j] - self.weights[i][j], 2)
+                sum += pow(inputs[j] - self.weights[i][j], 2)
 
-            self.weight_change_bias -= -errors2[i] * sigmoid_derivative(output2)[i] * output2[i] * (-sum)
+            self.weight_change_bias[i] -= -errors2[i] * sigmoid_derivative(output2)[i] * output2[i] * (-sum)
 
     # obj.T -> transponowanie macierzy
     # diagflat(array) tworzy macierz diagonalną z wyrazami z array na przekątnej

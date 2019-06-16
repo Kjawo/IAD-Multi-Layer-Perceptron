@@ -10,8 +10,8 @@ start = time.time()
 topology = [64, 1]
 rbf_topology = [True, False]
 bias = True
-_lambda = 0.3
-_momentum = 0.6
+_lambda = 0.1
+_momentum = 0.2
 sciezka = 'test'
 
 # train_X, train_Y, test_X, test_Y = prepData.iris()

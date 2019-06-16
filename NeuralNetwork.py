@@ -19,6 +19,22 @@ def sigmoid_derivative(x):
     return d
 
 
+def identity(x):
+    return x
+
+
+def identity_derivative(x):
+    z, y = x.shape
+    d = np.asmatrix(np.zeros((z, y)))
+    for i in range(z):
+        for j in range(y):
+            if (i == j):
+                d[i, j] = 1
+            else:
+                d[i, j] = 0
+    return d
+
+
 class NeuronLayer:
     def __init__(self, neurons_count, inputs_per_neuron, is_Bias, rbf_topology):
         self.rbf = rbf_topology
@@ -49,13 +65,14 @@ class NeuronLayer:
             self.output[i] = np.exp(-self.bias[i] * sum)
 
     def rbf_errors(self, error2, output2):
-        for i in range(0, self.input.shape[0]-1):
+        for i in range(0, self.input.shape[0] - 1):
             sum1 = 0
 
-            for j in range(0, self.output.shape[1]-1):
+            for j in range(0, self.output.shape[1] - 1):
                 sum2 = 0
                 sum2 += 2 * (self.input.item(i) - self.weights.item(i, j)) * 1
-                sum1 = -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * sigmoid_derivative(output2)[i][j]
+                sum1 = -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * sigmoid_derivative(output2)[i][
+                    j]
 
             self.error[i] = -sum1
 
@@ -66,9 +83,9 @@ class NeuronLayer:
                 self.weight_change -= -errors2.item(i) * sigmoid_derivative(output2)[i] * output2[i] * (
                     -self.bias.item(i)) * 2 * (input[j] - self.weights.item(i, j)) * (-1)
 
-        for i in range(0, self.input.shape[0]-1):
+        for i in range(0, self.input.shape[0] - 1):
             sum = 0
-            for j in range(0, self.output.shape[1]-1):
+            for j in range(0, self.output.shape[1] - 1):
                 sum += pow(input[j] - self.weights[i][j], 2)
 
             self.weight_change_bias -= -errors2[i] * sigmoid_derivative(output2)[i] * output2[i] * (-sum)

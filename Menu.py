@@ -10,8 +10,8 @@ start = time.time()
 topology = [64, 1]
 rbf_topology = [True, False]
 bias = True
-_lambda = 0.1
-_momentum = 0.3
+_lambda = 0.6
+_momentum = 0.5
 sciezka = 'test'
 
 # train_X, train_Y, test_X, test_Y = prepData.iris()
@@ -31,7 +31,7 @@ train_X, train_Y, test_X, test_Y = prepData.sin_data(True)
 # ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 #
-nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
+nn.learn(100, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
          rbf_topology)
 nn.test(test_X, test_Y, topology, sciezka, False, False, train_X.shape[1])
 

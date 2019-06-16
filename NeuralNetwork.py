@@ -38,16 +38,18 @@ def identity_derivative(x):
 class NeuronLayer:
     def __init__(self, neurons_count, inputs_per_neuron, is_Bias, rbf_topology):
         self.rbf = rbf_topology
-        self.weights = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron))) - 1) / 200
         # self.bias = (2 * np.asmatrix(np.random.random((ileNeuronow, 1))) - 1) / 2
         if is_Bias:
             self.bias_value = 1
         else:
             self.bias_value = 0
+
         if rbf_topology:
             self.bias = (2 * np.asmatrix(np.random.random((neurons_count, 1)))) / 2
+            self.weights = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron))) - 1) / 2
         else:
             self.bias = np.asmatrix(np.zeros((neurons_count, 1)))
+            self.weights = (2 * np.asmatrix(np.random.random((neurons_count, inputs_per_neuron))) - 1) / 2
         self.input = np.asmatrix([])
         # self.bias = (2 * np.asmatrix(np.random.random((ile_neuronow, 1))).astype(np.float32) - 1) / 2
         self.output = np.asmatrix(np.zeros((neurons_count, 1)).astype(np.float64))
@@ -71,7 +73,7 @@ class NeuronLayer:
             for j in range(0, self.output.shape[1] - 1):
                 sum2 = 0
                 sum2 += 2 * (self.input.item(i) - self.weights.item(i, j)) * 1
-                sum1 = -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * sigmoid_derivative(output2)[i][
+                sum1 += -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * identity_derivative(output2)[i][
                     j]
 
             self.error[i] = -sum1
@@ -80,7 +82,7 @@ class NeuronLayer:
         for i in range(0, self.input.shape[0]):
             for j in range(0, self.output.shape[1]):
                 # print(input)
-                self.weight_change -= -errors2.item(i) * sigmoid_derivative(output2)[i] * output2[i] * (
+                self.weight_change -= -errors2.item(i) * identity_derivative(output2)[i] * output2[i] * (
                     -self.bias.item(i)) * 2 * (input[j] - self.weights.item(i, j)) * (-1)
 
         for i in range(0, self.input.shape[0] - 1):
@@ -88,7 +90,7 @@ class NeuronLayer:
             for j in range(0, self.output.shape[1] - 1):
                 sum += pow(input[j] - self.weights[i][j], 2)
 
-            self.weight_change_bias -= -errors2[i] * sigmoid_derivative(output2)[i] * output2[i] * (-sum)
+            self.weight_change_bias -= -errors2[i] * identity_derivative(output2)[i] * output2[i] * (-sum)
 
     # obj.T -> transponowanie macierzy
     # diagflat(array) tworzy macierz diagonalną z wyrazami z array na przekątnej
@@ -148,8 +150,8 @@ class NeuralNetwork:
             self.layers[0].weight_change_bias = _lambda * np.multiply(
                 sigmoid_derivative(self.layers[0].output),
                 self.layers[0].error) + _momentum * self.layers[0].weight_change_bias
-            self.layers[0].weights = self.layers[0].weights + self.layers[0].weight_change
-            self.layers[0].bias = self.layers[0].bias + self.layers[0].weight_change_bias
+            self.layers[0].weights -= self.layers[0].weight_change
+            self.layers[0].bias -= self.layers[0].weight_change_bias
         else:
             self.errors(input_matrix, target_matrix)
             self.layers[0].rbf_weights_changes(input_matrix, self.layers[0].error, self.layers[0].output)
@@ -168,9 +170,9 @@ class NeuralNetwork:
                 self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
                 self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
             else:
-                self.layers[i].rbf_weights_changes(input_matrix, self.layers[0].error, self.layers[i - 1].output)
-                self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
-                self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
+                self.layers[i].rbf_weights_changes(self.layers[i].output, self.layers[0].error, self.layers[i - 1].output)
+                self.layers[i].weights -= self.layers[i].weight_change
+                self.layers[i].bias -= self.layers[i].weight_change_bias
 
 
 def learn(_epoki, _topology, _input_matrix, _target_matrix, train_X, train_Y, _lambda, _momentum, _bias,

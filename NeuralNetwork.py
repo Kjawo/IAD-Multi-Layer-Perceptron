@@ -73,24 +73,27 @@ class NeuronLayer:
             for j in range(0, self.output.shape[1] - 1):
                 sum2 = 0
                 sum2 += 2 * (self.input.item(i) - self.weights.item(i, j)) * 1
-                sum1 += -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * identity_derivative(output2)[i][
-                    j]
+                sum1 += -error2.item(i) * output2.item(i) * sum2 * (-self.bias.item(i)) * \
+                        identity_derivative(output2)[i][
+                            j]
 
             self.error[i] = -sum1
 
-    def rbf_weights_changes(self, input, errors2, output2):
+    def rbf_weights_changes(self, input, errors2, output2, _lambda, _momentum):
         for i in range(0, self.input.shape[0]):
             for j in range(0, self.output.shape[1]):
                 # print(input)
-                self.weight_change -= -errors2.item(i) * identity_derivative(output2)[i] * output2[i] * (
-                    -self.bias.item(i)) * 2 * (input[j] - self.weights.item(i, j)) * (-1)
+                self.weight_change[i] -= -errors2.item(i) * identity_derivative(output2)[i] * output2[i] * (
+                    -self.bias.item(i)) * 2 * (input[j] - self.weights.item(i, j)) * (
+                                             -1) * _lambda + _momentum * self.weight_change[i]
 
         for i in range(0, self.input.shape[0] - 1):
             sum = 0
             for j in range(0, self.output.shape[1] - 1):
                 sum += pow(input[j] - self.weights[i][j], 2)
 
-            self.weight_change_bias -= -errors2[i] * identity_derivative(output2)[i] * output2[i] * (-sum)
+            self.weight_change_bias[i] -= -errors2[i] * identity_derivative(output2)[i] * output2[i] * (
+                -sum) * _lambda + _momentum * self.weight_change_bias[i]
 
     # obj.T -> transponowanie macierzy
     # diagflat(array) tworzy macierz diagonalną z wyrazami z array na przekątnej
@@ -154,7 +157,8 @@ class NeuralNetwork:
             self.layers[0].bias -= self.layers[0].weight_change_bias
         else:
             self.errors(input_matrix, target_matrix)
-            self.layers[0].rbf_weights_changes(input_matrix, self.layers[0].error, self.layers[0].output)
+            self.layers[0].rbf_weights_changes(input_matrix, self.layers[0].error, self.layers[0].output, _lambda,
+                                               _momentum)
             self.layers[0].weights = self.layers[0].weights + self.layers[0].weight_change
             self.layers[0].bias = self.layers[0].bias + self.layers[0].weight_change_bias
 
@@ -170,7 +174,9 @@ class NeuralNetwork:
                 self.layers[i].weights = self.layers[i].weights + self.layers[i].weight_change
                 self.layers[i].bias = self.layers[i].bias + self.layers[i].weight_change_bias
             else:
-                self.layers[i].rbf_weights_changes(self.layers[i].output, self.layers[0].error, self.layers[i - 1].output)
+                self.layers[i].rbf_weights_changes(self.layers[i - 1].output, self.layers[0].error,
+                                                   self.layers[i].output, _lambda,
+                                                   _momentum)
                 self.layers[i].weights -= self.layers[i].weight_change
                 self.layers[i].bias -= self.layers[i].weight_change_bias
 

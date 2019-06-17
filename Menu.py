@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 start = time.time()
 
 topology = [64, 1]
-rbf_topology = [True, False]
+rbf_topology = [False, False]
 bias = True
-_lambda = 0.6
-_momentum = 0.5
-sciezka = 'test'
+_lambda = 0.3
+_momentum = 0.2
+sciezka = 'sin-mlp-extra'
 
 # train_X, train_Y, test_X, test_Y = prepData.iris()
 
@@ -21,7 +21,7 @@ sciezka = 'test'
 # nn.learn(100, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True)
 # nn.test(test_X, test_Y, topology, sciezka, False, False)
 
-train_X, train_Y, test_X, test_Y = prepData.sin_cos_data(True)
+train_X, train_Y, test_X, test_Y = prepData.sin_data(True)
 
 # plt.plot(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
@@ -31,7 +31,7 @@ train_X, train_Y, test_X, test_Y = prepData.sin_cos_data(True)
 # ax.scatter(test_X[:, 0], test_X[:, 1], test_Y)
 # plt.show()
 #
-nn.learn(10, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
+nn.learn(15, topology, train_X, train_Y, test_X, test_Y, _lambda, _momentum, bias, 1, 0.001, sciezka, False, True,
          rbf_topology)
 nn.test(test_X, test_Y, topology, sciezka, False, False, train_X.shape[1])
 

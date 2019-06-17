@@ -148,11 +148,59 @@ def sqrt_data(betweenZeroAndOne):
     return train_x, train_y, test_x, test_y
 
 
+def sqrt_data_extrapolate(betweenZeroAndOne):
+    x = np.array([])
+    y = np.array([])
+
+    for i in np.arange(0, 30.0, 30.0 / 3000):
+        x = np.append(x, i)
+
+    y = np.sqrt(x)
+
+    if betweenZeroAndOne:
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
+        y = np.interp(y, (y.min(), y.max()), (0, +1))
+
+    x.shape = [x.shape[0], 1]
+    y.shape = [y.shape[0], 1]
+
+    test_x = x[::3]
+    test_y = y[::3]
+    train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
+    train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
+
+    return train_x, train_y, test_x, test_y
+
+
 def sin_data(betweenZeroAndOne):
     x = np.array([])
     y = np.array([])
 
     for i in np.arange(-10.0, 10.0, 20.0 / 3000):
+        x = np.append(x, i)
+
+    y = np.sin(x)
+
+    if betweenZeroAndOne:
+        # x = np.interp(x, (x.min(), x.max()), (0, +1))
+        y = np.interp(y, (y.min(), y.max()), (0, +1))
+
+    x.shape = [x.shape[0], 1]
+    y.shape = [y.shape[0], 1]
+
+    test_x = x[::3]
+    test_y = y[::3]
+    train_x = np.delete(x, np.arange(0, x.shape[0], 3), axis=0)
+    train_y = np.delete(y, np.arange(0, y.shape[0], 3), axis=0)
+
+    return train_x, train_y, test_x, test_y
+
+
+def sin_data_extrapolate(betweenZeroAndOne):
+    x = np.array([])
+    y = np.array([])
+
+    for i in np.arange(-20.0, 20.0, 40.0 / 3000):
         x = np.append(x, i)
 
     y = np.sin(x)
